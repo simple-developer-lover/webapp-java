@@ -51,7 +51,7 @@ public class SpiderProxyImpl implements SpiderProxy {
 	public SocketResponse<Set<TiebaUser>> baiduTieba(Request request) {
 		String msg = sendData(request);
 		SocketResponse<Set<TiebaUser>> resp = SocketResponse.of(msg);
-		Assert.isTrue(resp != null || !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
+		Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
 		return resp;
 	}
 
@@ -59,7 +59,7 @@ public class SpiderProxyImpl implements SpiderProxy {
 	public SocketResponse<Set<TaobaoShop>> taobaoGoods(Request request) {
 		String msg = sendData(request);
 		SocketResponse<Set<TaobaoShop>> resp = SocketResponse.of(msg);
-		Assert.isTrue(resp != null || !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
+		Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
 		return resp;
 	}
 }
