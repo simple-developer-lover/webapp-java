@@ -44,10 +44,11 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 	public Response<?> baiduTieba(Request request) {
 		try {
 			SocketResponse<Set<TiebaUser>> resp = spiderProxy.baiduTieba(request);
-			new Thread(() -> {
+			tiebaUserDao.saveAll(resp.getData());
+			/*new Thread(() -> {
 				tiebaUserDao.saveAll(resp.getData());
-			}).start();
-			return Response.of(resp.getData());
+			}).start();*/
+			return Response.of(200);
 		} catch (Exception e) {
 			return Response.builder().status(199).exception(e).build();
 		}
@@ -60,7 +61,20 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 			Set<TaobaoShop> shops = resp.getData();
 			Set<Model_pic> models = Sets.newHashSet();
 			Set<TaobaoGoods_Bra> bras = Sets.newHashSet();
-			new Thread(() -> {
+			taobaoShopDao.saveAll(shops);
+			shops.forEach(shop -> {
+				shop.getModel_pics().forEach(model -> {
+					model.setShopId(shop.getShopId());
+					models.add(model);
+				});
+				shop.getTaobaogoods_bras().forEach(bra -> {
+					bra.setShopId(shop.getShopId());
+					bras.add(bra);
+				});
+			});
+			taobaoGoods_braDao.saveAll(bras);
+			taobaoModelDao.saveAll(models);
+			/*new Thread(() -> {
 				taobaoShopDao.saveAll(shops);
 				shops.forEach(shop -> {
 					shop.getModel_pics().forEach(model -> {
@@ -75,7 +89,8 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 				taobaoGoods_braDao.saveAll(bras);
 				taobaoModelDao.saveAll(models);
 			}).start();
-			return Response.of(shops);
+			 */
+			return Response.of(200);
 		} catch (Exception e) {
 			return Response.builder().status(199).exception(e).build();
 		}
