@@ -5,9 +5,9 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 import indi.monkey.webapp.commons.annotation.ReserveProxy;
 import indi.monkey.webapp.commons.dto.Request;
@@ -27,6 +27,7 @@ public class SpiderProxyImpl implements SpiderProxy {
 	private static final String ACTION_TYPE = "actionType";
 	private static final String SUCCESS_CODE = "success";
 	private static final String ERROR_CODE = "error";
+	private static final String ERROR_MSG = "socket response error... for response:";
 
 	private String sendData(Request request) {
 		Map<String, String> context = request.getContext();
@@ -50,9 +51,7 @@ public class SpiderProxyImpl implements SpiderProxy {
 	public SocketResponse<Set<TiebaUser>> baiduTieba(Request request) {
 		String msg = sendData(request);
 		SocketResponse<Set<TiebaUser>> resp = SocketResponse.of(msg);
-		if (resp.getStatus() == ERROR_CODE) {
-			throw new RuntimeException(resp.getMsg());
-		}
+		Assert.isTrue(resp == null || ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
 		return resp;
 	}
 
@@ -60,9 +59,7 @@ public class SpiderProxyImpl implements SpiderProxy {
 	public SocketResponse<Set<TaobaoShop>> taobaoGoods(Request request) {
 		String msg = sendData(request);
 		SocketResponse<Set<TaobaoShop>> resp = SocketResponse.of(msg);
-		if (resp.getStatus() == ERROR_CODE) {
-			throw new RuntimeException(resp.getMsg());
-		}
+		Assert.isTrue(resp == null || ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
 		return resp;
 	}
 }

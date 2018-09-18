@@ -30,4 +30,5 @@ public class SocketResponse<T> implements Serializable {
 	public static <T> SocketResponse<T> of(String s) {
 		return gson.fromJson(s, TypeToken.of(SocketResponse.class).getType());
 	}
+
 }
