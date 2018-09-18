@@ -7,4 +7,5 @@ import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoShop;
 
 public interface TaobaoShopDao extends JpaRepository<TaobaoShop,Integer>{
 	
+	
 }

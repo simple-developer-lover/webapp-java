@@ -22,13 +22,17 @@ public class TaobaoGoods_Bra {
 	@SerializedName(value = "rateContent", alternate = { "content" })
 	@Column(name = "rateContent", length = 300)
 	private String rateContent;
-	
-	@Column(name = "shop_id",length = 20)
+
+	@Column(name = "shop_id", length = 20)
 	private String shopId;
-	
+
 	@SerializedName(value = "size")
 	@Column(length = 15)
 	private String size;
+
+	@SerializedName(value = "cup")
+	@Column(length = 2)
+	private String cup;
 
 	@SerializedName(value = "color")
 	@Column(length = 15)
