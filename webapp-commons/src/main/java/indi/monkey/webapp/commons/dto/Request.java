@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 
@@ -80,5 +79,13 @@ public class Request implements Serializable {
 			context = Maps.newHashMap();
 		}
 		context.putAll(params);
+	}
+
+	public String getParam(String key) {
+		return context.get(key);
+	}
+
+	public String getParam(String key, String defaultVal) {
+		return context.getOrDefault(key, defaultVal);
 	}
 }

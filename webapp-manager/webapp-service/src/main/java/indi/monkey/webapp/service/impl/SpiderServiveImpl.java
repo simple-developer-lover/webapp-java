@@ -1,5 +1,6 @@
 package indi.monkey.webapp.service.impl;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,6 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 		try {
 			SocketResponse<Set<TiebaUser>> resp = spiderProxy.baiduTieba(request);
 			tiebaUserDao.saveAll(resp.getData());
-			/*new Thread(() -> {
-				tiebaUserDao.saveAll(resp.getData());
-			}).start();*/
 			return Response.of(200);
 		} catch (Exception e) {
 			return Response.builder().status(199).exception(e).build();
@@ -61,6 +59,7 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 			Set<TaobaoShop> shops = resp.getData();
 			Set<Model_pic> models = Sets.newHashSet();
 			Set<TaobaoGoods_Bra> bras = Sets.newHashSet();
+			List<TaobaoShop> all_shops = taobaoShopDao.findAll();
 			taobaoShopDao.saveAll(shops);
 			shops.forEach(shop -> {
 				shop.getModel_pics().forEach(model -> {
@@ -72,27 +71,41 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 					bras.add(bra);
 				});
 			});
-			taobaoGoods_braDao.saveAll(bras);
-			taobaoModelDao.saveAll(models);
-			/*new Thread(() -> {
-				taobaoShopDao.saveAll(shops);
-				shops.forEach(shop -> {
-					shop.getModel_pics().forEach(model -> {
-						model.setShopId(shop.getShopId());
-						models.add(model);
-					});
-					shop.getTaobaogoods_bras().forEach(bra -> {
-						bra.setShopId(shop.getShopId());
-						bras.add(bra);
-					});
+			shops.removeIf(shop -> {
+				if (all_shops.contains(shop)) {
+					return true;
+				}
+				return false;
+			});
+
+			if (bras.size() > 0) {
+				List<TaobaoGoods_Bra> all_bras = taobaoGoods_braDao.findAll();
+				bras.removeIf(bra -> {
+					if (all_bras.contains(bra)) {
+						return true;
+					}
+					return false;
 				});
 				taobaoGoods_braDao.saveAll(bras);
+			}
+			if (models.size() > 0) {
+				List<Model_pic> all_pics = taobaoModelDao.findAll();
+				models.removeIf(pic -> {
+					if (all_pics.contains(pic)) {
+						return true;
+					}
+					return false;
+				});
 				taobaoModelDao.saveAll(models);
-			}).start();
-			 */
+			}
 			return Response.of(200);
 		} catch (Exception e) {
 			return Response.builder().status(199).exception(e).build();
 		}
+	}
+
+	public Response<?> findBrasByCup(Request request) {
+		Set<TaobaoGoods_Bra> bras = taobaoGoods_braDao.findAllByCup(request.getParam("cup"));
+		return Response.of(bras);
 	}
 }

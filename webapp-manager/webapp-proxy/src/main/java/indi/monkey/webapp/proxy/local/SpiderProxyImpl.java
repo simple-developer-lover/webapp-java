@@ -38,7 +38,7 @@ public class SpiderProxyImpl implements SpiderProxy {
 			logger.info("start request data:{}", data);
 			try {
 				String msg = client.sendMsg(data);
-				logger.info("socket response:{}", msg);
+				logger.info("socket response:{} ...", msg.substring(0, Math.min(msg.length(), 100)));
 				SocketResponse<T> resp = SocketResponse.of(msg);
 				Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
 				return resp;
