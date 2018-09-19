@@ -22,14 +22,14 @@ public class SpiderProxyImpl implements SpiderProxy {
 
 	private static final Logger logger = LoggerFactory.getLogger(SpiderProxyImpl.class);
 
-	private static String IP = "localhost";
-	private static int PORT = 8888;
+	private static final String IP = "localhost";
+	private static final int PORT = 8888;
 	private static final String ACTION_TYPE = "actionType";
 	private static final String SUCCESS_CODE = "success";
 	private static final String ERROR_CODE = "error";
-	private static final String ERROR_MSG = "socket response error... for response:";
+	private static final String ERROR_MSG = "socket response error... :";
 
-	private String sendData(Request request) {
+	private <T> SocketResponse<T> sendData(Request request) {
 		Map<String, String> context = request.getContext();
 		if (context.size() != 0) {
 			SocketClient client = new SocketClient(IP, PORT);
@@ -39,27 +39,25 @@ public class SpiderProxyImpl implements SpiderProxy {
 			try {
 				String msg = client.sendMsg(data);
 				logger.info("socket response:{}", msg);
-				return msg;
+				SocketResponse<T> resp = SocketResponse.of(msg);
+				Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
+				return resp;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(ERROR_MSG, e);
+				throw e;
 			}
+		} else {
+			throw new IllegalArgumentException("request context can not be empty");
 		}
-		return null;
 	}
 
 	@Override
 	public SocketResponse<Set<TiebaUser>> baiduTieba(Request request) {
-		String msg = sendData(request);
-		SocketResponse<Set<TiebaUser>> resp = SocketResponse.of(msg);
-		Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
-		return resp;
+		return sendData(request);
 	}
 
 	@Override
 	public SocketResponse<Set<TaobaoShop>> taobaoGoods(Request request) {
-		String msg = sendData(request);
-		SocketResponse<Set<TaobaoShop>> resp = SocketResponse.of(msg);
-		Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
-		return resp;
+		return sendData(request);
 	}
 }
