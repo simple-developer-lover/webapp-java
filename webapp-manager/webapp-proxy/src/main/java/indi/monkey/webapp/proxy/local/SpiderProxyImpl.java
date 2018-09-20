@@ -13,6 +13,7 @@ import indi.monkey.webapp.commons.annotation.ReserveProxy;
 import indi.monkey.webapp.commons.dto.Request;
 import indi.monkey.webapp.commons.dto.SocketResponse;
 import indi.monkey.webapp.commons.socket.SocketClient;
+import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoGoods_Bra;
 import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoShop;
 import indi.monkey.webapp.pojo.hibernate.tieba.TiebaUser;
 import indi.monkey.webapp.proxy.SpiderProxy;
@@ -57,7 +58,7 @@ public class SpiderProxyImpl implements SpiderProxy {
 	}
 
 	@Override
-	public SocketResponse<Set<TaobaoShop>> taobaoGoods(Request request) {
+	public SocketResponse<Map<TaobaoShop, TaobaoGoods_Bra>> taobaoGoods(Request request) {
 		return sendData(request);
 	}
 }

@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import indi.monkey.webapp.pojo.hibernate.taobao.Model_pic;
 
 public interface TaobaoModelDao extends JpaRepository<Model_pic, Integer> {
-
-	@Query("SELECT shop_id,pic_url FROM model_pic WHERE shop_id = :shopId")
-	Set<Model_pic> findAllByShopId(@Param("shopId") String shopId);
+/*
+	@Query("select model from model_pic model WHERE model.shop_id = :shopId")
+	Set<Model_pic> findAllByShopId(@Param("shopId") String shopId);*/
 }

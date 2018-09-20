@@ -1,13 +1,13 @@
-function sendUrl(t) {
-	var url = $(t).val();
+function sendData(t) {
+	var query = $(t).val();
 	var func = $(t).removeAttr("onblur");
 	var actionType = $(t).attr("action-Type");
 	var data = {
-		"url" : url
+		"data" : query
 	};
 	var requestUrl = basePath + service + "/" + actionType;
 	console.log(requestUrl);
-	if (url && url.length > 0 && JSON.stringify(result_data_all) == "{}") {
+	if (query && query.length > 0 && JSON.stringify(result_data_all) == "{}") {
 		$.post(requestUrl, data, function(result) {
 			if (result && result.status == 200) {
 				var data = JSON.parse(result.data);

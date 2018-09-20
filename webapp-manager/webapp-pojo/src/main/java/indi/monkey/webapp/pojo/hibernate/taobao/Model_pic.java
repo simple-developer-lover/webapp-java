@@ -1,9 +1,11 @@
 package indi.monkey.webapp.pojo.hibernate.taobao;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import com.google.gson.annotations.SerializedName;
@@ -16,11 +18,12 @@ import lombok.Data;
 public class Model_pic {
 	@Id
 	@GeneratedValue
-	@Column(length = 5)
 	@SerializedName(value = "id")
 	private Integer id;
 
 	@Column(name = "shop_id", length = 20)
+	@JoinColumn(name = "shop_id")
+	@EmbeddedId
 	@SerializedName(value = "shopId")
 	private String shopId;
 
