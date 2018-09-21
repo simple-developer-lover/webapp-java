@@ -2,7 +2,6 @@ package test;
 
 import org.junit.Test;
 
-import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 
 import indi.monkey.webapp.commons.dto.SocketResponse;

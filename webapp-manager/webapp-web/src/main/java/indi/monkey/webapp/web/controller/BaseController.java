@@ -32,7 +32,6 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @ExecuteService(executeClasses = BaseServiceImpl.class)
-@RequestMapping
 public class BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
