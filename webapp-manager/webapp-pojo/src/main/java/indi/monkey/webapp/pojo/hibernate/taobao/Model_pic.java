@@ -1,5 +1,7 @@
 package indi.monkey.webapp.pojo.hibernate.taobao;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -15,7 +17,12 @@ import lombok.Data;
 @Entity
 @Table(name = "model_pic")
 @Data
-public class Model_pic {
+public class Model_pic implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7392461536578049624L;
+
 	@Id
 	@GeneratedValue
 	@SerializedName(value = "id")
@@ -23,7 +30,6 @@ public class Model_pic {
 
 	@Column(name = "shop_id", length = 20)
 	@JoinColumn(name = "shop_id")
-	@EmbeddedId
 	@SerializedName(value = "shopId")
 	private String shopId;
 

@@ -1,15 +1,19 @@
 package indi.monkey.webapp.pojo.hibernate.taobao;
 
-import java.util.Set;
+import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Target;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -18,7 +22,12 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "taobao_shop")
-public class TaobaoShop {
+public class TaobaoShop implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6382376130424653249L;
 
 	@Id
 	@GeneratedValue
@@ -33,16 +42,12 @@ public class TaobaoShop {
 	private String shopId;
 
 	@Column(length = 30)
-	@SerializedName(value = "seller_id", alternate = { "user_id" })
+	@SerializedName(value = "seller_id", alternate = { "sellerId", "user_id" })
 	private String sellerId;
 
-	@SerializedName(value = "model_pics", alternate = { "models" })
-	@OneToMany(targetEntity = Model_pic.class, mappedBy = "shopId")
-	private Set<Model_pic> model_pics;
-
-	@OneToMany(targetEntity = TaobaoGoods_Bra.class, mappedBy = "shopId")
-	@SerializedName(value = "taobaogoods_bras", alternate = { "bras" })
-	private Set<TaobaoGoods_Bra> taobaogoods_bras;
+	@OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@SerializedName(value = "bras")
+	private List<TaobaoGoods_Bra> bras;
 
 	@Override
 	public boolean equals(Object obj) {

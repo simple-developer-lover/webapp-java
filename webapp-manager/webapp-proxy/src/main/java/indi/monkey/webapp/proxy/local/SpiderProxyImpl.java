@@ -1,5 +1,9 @@
 package indi.monkey.webapp.proxy.local;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -8,10 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.google.gson.reflect.TypeToken;
 
 import indi.monkey.webapp.commons.annotation.ReserveProxy;
 import indi.monkey.webapp.commons.dto.Request;
 import indi.monkey.webapp.commons.dto.SocketResponse;
+import indi.monkey.webapp.commons.pub.util.FileUtil;
+import indi.monkey.webapp.commons.pub.util.UUIDUtil;
 import indi.monkey.webapp.commons.socket.SocketClient;
 import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoGoods_Bra;
 import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoShop;
@@ -30,7 +38,7 @@ public class SpiderProxyImpl implements SpiderProxy {
 	private static final String ERROR_CODE = "error";
 	private static final String ERROR_MSG = "socket response error... :";
 
-	private <T> SocketResponse<T> sendData(Request request) {
+	private String sendData(Request request) {
 		Map<String, String> context = request.getContext();
 		if (context.size() != 0) {
 			SocketClient client = new SocketClient(IP, PORT);
@@ -39,10 +47,8 @@ public class SpiderProxyImpl implements SpiderProxy {
 			logger.info("start request data:{}", data);
 			try {
 				String msg = client.sendMsg(data);
-				logger.info("socket response:{} ...", msg.substring(0, Math.min(msg.length(), 100)));
-				SocketResponse<T> resp = SocketResponse.of(msg);
-				Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
-				return resp;
+				logger.info("socket response:{} ...", msg);
+				return msg;
 			} catch (Exception e) {
 				logger.error(ERROR_MSG, e);
 				throw e;
@@ -54,11 +60,26 @@ public class SpiderProxyImpl implements SpiderProxy {
 
 	@Override
 	public SocketResponse<Set<TiebaUser>> baiduTieba(Request request) {
-		return sendData(request);
+		String msg = sendData(request);
+		SocketResponse<Set<TiebaUser>> resp = JSON.parseObject(msg,
+				new TypeReference<SocketResponse<Set<TiebaUser>>>() {
+				});
+		Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
+		return resp;
 	}
 
 	@Override
-	public SocketResponse<Map<TaobaoShop, TaobaoGoods_Bra>> taobaoGoods(Request request) {
-		return sendData(request);
+	public SocketResponse<List<TaobaoShop>> taobaoGoods(Request request) {
+		String msg = sendData(request);
+		try {
+			FileUtil.write(UUIDUtil.getUUID32(), msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		SocketResponse<List<TaobaoShop>> resp = JSON.parseObject(msg,
+				new TypeReference<SocketResponse<List<TaobaoShop>>>() {
+				});
+		Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
+		return resp;
 	}
 }

@@ -56,28 +56,16 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 	@HandlerMethod("taobaoGoods")
 	public Response<?> taobaoGoods(Request request) {
 		try {
-			SocketResponse<Map<TaobaoShop, TaobaoGoods_Bra>> resp = spiderProxy.taobaoGoods(request);
-			Set<TaobaoShop> shops = resp.getData().keySet();
-			Set<Model_pic> models = Sets.newHashSet();
-			Set<TaobaoGoods_Bra> bras = Sets.newHashSet();
-			taobaoShopDao.saveAll(shops);
-			shops.forEach(shop -> {
-				Set<TaobaoGoods_Bra> bs = shop.getTaobaogoods_bras();
-				Set<Model_pic> ms = shop.getModel_pics();
-				bs.forEach(bra -> {
-					bra.setShopId(shop.getShopId());
-				});
-				ms.forEach(model -> {
-					model.setShopId(shop.getShopId());
-				});
-				bras.addAll(bs);
-				models.addAll(ms);
+			SocketResponse<List<TaobaoShop>> taobaoGoods = spiderProxy.taobaoGoods(request);
+			List<TaobaoShop> data = taobaoGoods.getData();
+			Set<TaobaoShop> shops = Sets.newHashSet();
+			Set<TaobaoGoods_Bra> goods = Sets.newHashSet();
+
+			data.forEach(shop ->{
 			});
-			if (bras.size() > 0) {
-				taobaoGoods_braDao.saveAll(bras);
-			}
-			if (models.size() > 0) {
-				taobaoModelDao.saveAll(models);
+			taobaoShopDao.saveAll(shops);
+			if (goods.size() > 0) {
+				taobaoGoods_braDao.saveAll(goods);
 			}
 			return Response.of(200);
 		} catch (Exception e) {

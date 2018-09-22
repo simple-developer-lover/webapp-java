@@ -1,5 +1,8 @@
 package indi.monkey.webapp.commons.pub.util;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 public class APPUtil {
 
 	public static final String defaultConfigName = "application.properties";
@@ -16,4 +19,12 @@ public class APPUtil {
 		return path.replace(name, "");
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T >Class<T> getGenericType(Class<?> targetClass) {
+		Type[] types = ((ParameterizedType) targetClass.getGenericSuperclass()).getActualTypeArguments();
+		if (types.length == 1) {
+			return (Class<T>) types[0];
+		}
+		throw new RuntimeException("genericType error!!!");
+	}
 }

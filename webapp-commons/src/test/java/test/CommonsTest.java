@@ -10,10 +10,8 @@ public class CommonsTest {
 	@Test
 	public void test01() {
 		String json = "{\"status\":\"1\",\"message\":\"success\",\"data\":\"111\"}";
-		SocketResponse<String> socket = SocketResponse.of(json);
-		System.out.println(socket.getData());
-	}
 	
+	}
 	@Test
 	public void test02() {
 		Gson gson = new Gson();

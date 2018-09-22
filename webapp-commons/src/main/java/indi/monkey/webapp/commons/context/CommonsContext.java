@@ -1,7 +1,5 @@
 package indi.monkey.webapp.commons.context;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -13,23 +11,16 @@ import org.springframework.context.ApplicationContextAware;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import indi.monkey.webapp.commons.pub.util.APPUtil;
+
 public class CommonsContext<T> implements ApplicationContextAware {
 
 	protected ApplicationContext applicationContext;
 
 	protected Map<String, T> beanMap = Maps.newHashMap();
 
-	@SuppressWarnings("unchecked")
-	private Class<T> getGenericType() {
-		Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
-		if (types.length == 1) {
-			return (Class<T>) types[0];
-		}
-		throw new RuntimeException("genericType error!!!");
-	}
-
 	public void init() {
-		Class<T> type = getGenericType();
+		Class<T> type = APPUtil.getGenericType(this.getClass());
 		beanMap = applicationContext.getBeansOfType(type, false, true);
 		if (beanMap == null) {
 			beanMap = Maps.newHashMap();

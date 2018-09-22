@@ -1,11 +1,14 @@
 package indi.monkey.webapp.pojo.hibernate.taobao;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.google.gson.annotations.SerializedName;
@@ -15,7 +18,12 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "taobaogoods_bra")
-public class TaobaoGoods_Bra {
+public class TaobaoGoods_Bra implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4375272496164893922L;
 
 	@Id
 	@GeneratedValue
@@ -25,11 +33,10 @@ public class TaobaoGoods_Bra {
 	@Column(name = "rateContent", length = 300)
 	private String rateContent;
 
-	@Column(name = "shop_id", length = 20)
-	@JoinColumn(name = "shop_id")
-	@EmbeddedId
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "shop_id", referencedColumnName = "shop_id", foreignKey = @ForeignKey(name = "shop_id"))
 	@SerializedName(value = "shopId")
-	private String shopId;
+	private TaobaoShop shop;
 
 	@SerializedName(value = "size")
 	@Column(length = 15)

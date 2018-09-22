@@ -1,5 +1,6 @@
 package indi.monkey.webapp.proxy;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,5 +20,5 @@ public interface SpiderProxy {
 	SocketResponse<Set<TiebaUser>> baiduTieba(Request request);
 
 	@RequestMapping("/taobaogoods")
-	SocketResponse<Map<TaobaoShop, TaobaoGoods_Bra>> taobaoGoods(Request request);
+	SocketResponse<List<TaobaoShop>> taobaoGoods(Request request);
 }

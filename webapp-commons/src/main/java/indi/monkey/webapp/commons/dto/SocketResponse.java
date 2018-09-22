@@ -1,11 +1,13 @@
 package indi.monkey.webapp.commons.dto;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
+import indi.monkey.webapp.commons.pub.util.APPUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,8 +29,8 @@ public class SocketResponse<T> implements Serializable {
 	@SerializedName(value = "data")
 	private T data;
 
-	public static <T> SocketResponse<T> of(String s) {
-		return gson.fromJson(s, TypeToken.of(SocketResponse.class).getType());
+	public static <T> SocketResponse<T> of(String s, Type type) {
+		return gson.fromJson(s, type);
 	}
 
 }
