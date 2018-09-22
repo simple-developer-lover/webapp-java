@@ -59,20 +59,19 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 		try {
 			SocketResponse<List<TaobaoShop>> taobaoGoods = spiderProxy.taobaoGoods(request);
 			List<TaobaoShop> data = taobaoGoods.getData();
-			Set<TaobaoShop> shops = Sets.newHashSet();
-			Set<TaobaoGoods_Bra> goods = Sets.newHashSet();
+			Set<TaobaoGoods_Bra> bras = Sets.newHashSet();
 			data.forEach(shop -> {
 				if (shop.getShopId() != null) {
-					shops.add(shop);
-					goods.addAll(shop.getBras());
-					goods.forEach(bra -> {
+					List<TaobaoGoods_Bra> bs = shop.getBras();
+					taobaoShopDao.save(shop);
+					bs.forEach(bra -> {
 						bra.setShop(shop);
+						bras.addAll(bs);
 					});
 				}
 			});
-			taobaoShopDao.saveAll(shops);
-			if (goods.size() > 0) {
-				taobaoGoods_braDao.saveAll(goods);
+			if (bras.size() > 0) {
+				taobaoGoods_braDao.saveAll(bras);
 			}
 			return Response.of(200);
 		} catch (Exception e) {

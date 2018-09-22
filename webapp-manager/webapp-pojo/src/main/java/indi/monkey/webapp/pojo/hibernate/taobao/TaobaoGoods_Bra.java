@@ -33,11 +33,6 @@ public class TaobaoGoods_Bra implements Serializable {
 	@Column(name = "rateContent", length = 1000)
 	private String rateContent;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "shop_id", referencedColumnName = "shop_id", foreignKey = @ForeignKey(name = "shop_id"))
-	@SerializedName(value = "shopId")
-	private TaobaoShop shop;
-
 	@SerializedName(value = "size")
 	@Column(length = 15)
 	private String size;
@@ -50,4 +45,12 @@ public class TaobaoGoods_Bra implements Serializable {
 	@Column(length = 20)
 	private String color;
 
+	@SerializedName(value = "auctionSku")
+	@Column(name = "auctionSku", length = 40)
+	private String auctionSku;
+	
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "shop_id", referencedColumnName = "shop_id", foreignKey = @ForeignKey(name = "shop_id"))
+	@SerializedName(value = "shopId")
+	private TaobaoShop shop;
 }
