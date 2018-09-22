@@ -6,7 +6,7 @@ public class JpaDialectConfig extends MySQL5Dialect {
 
 	@Override
 	public String getTableTypeString() {
-		return " ENGINE=InnoDB DEFAULT CHARSET=utf-8mb4";
+		return " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 	}
 
 }
