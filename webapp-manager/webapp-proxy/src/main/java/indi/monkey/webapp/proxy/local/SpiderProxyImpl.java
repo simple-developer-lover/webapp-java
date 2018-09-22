@@ -1,8 +1,6 @@
 package indi.monkey.webapp.proxy.local;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +11,6 @@ import org.springframework.util.Assert;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.google.gson.reflect.TypeToken;
 
 import indi.monkey.webapp.commons.annotation.ReserveProxy;
 import indi.monkey.webapp.commons.dto.Request;
@@ -21,7 +18,6 @@ import indi.monkey.webapp.commons.dto.SocketResponse;
 import indi.monkey.webapp.commons.pub.util.FileUtil;
 import indi.monkey.webapp.commons.pub.util.UUIDUtil;
 import indi.monkey.webapp.commons.socket.SocketClient;
-import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoGoods_Bra;
 import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoShop;
 import indi.monkey.webapp.pojo.hibernate.tieba.TiebaUser;
 import indi.monkey.webapp.proxy.SpiderProxy;
@@ -47,7 +43,7 @@ public class SpiderProxyImpl implements SpiderProxy {
 			logger.info("start request data:{}", data);
 			try {
 				String msg = client.sendMsg(data);
-				logger.info("socket response:{} ...", msg);
+				logger.info("socket response:{} ...", msg.substring(0, Math.min(100, msg.length())));
 				return msg;
 			} catch (Exception e) {
 				logger.error(ERROR_MSG, e);
@@ -64,22 +60,17 @@ public class SpiderProxyImpl implements SpiderProxy {
 		SocketResponse<Set<TiebaUser>> resp = JSON.parseObject(msg,
 				new TypeReference<SocketResponse<Set<TiebaUser>>>() {
 				});
-		Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
+		Assert.isTrue(resp != null && SUCCESS_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
 		return resp;
 	}
 
 	@Override
 	public SocketResponse<List<TaobaoShop>> taobaoGoods(Request request) {
 		String msg = sendData(request);
-		try {
-			FileUtil.write(UUIDUtil.getUUID32(), msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		SocketResponse<List<TaobaoShop>> resp = JSON.parseObject(msg,
 				new TypeReference<SocketResponse<List<TaobaoShop>>>() {
 				});
-		Assert.isTrue(resp != null && !ERROR_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
+		Assert.isTrue(resp != null && SUCCESS_CODE.equals(resp.getStatus()), ERROR_MSG + resp);
 		return resp;
 	}
 }

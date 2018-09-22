@@ -66,9 +66,10 @@ public class JpaConfig {
 		factory.setDataSource(dataSource);
 		Map<String, Object> jpaProperties = Maps.newHashMap();
 		put("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy", jpaProperties);
+		put("hibernate.dialect", "indi.monkey.webapp.dao.config.JpaDialectConfig", jpaProperties);
 		put("hibernate.jdbc.batch_size", "50", jpaProperties);
 		put("hibernate.hbm2ddl.auto", "update", jpaProperties);
-		put("hibernate.show_sql", "true", jpaProperties);
+		put("hibernate.show_sql", "false", jpaProperties);
 		put("hibernate.format_sql", "true", jpaProperties);
 		logger.info("start init {} .... properties :{}... datasource:{}", this.getClass().getName(), jpaProperties,
 				dataSource);

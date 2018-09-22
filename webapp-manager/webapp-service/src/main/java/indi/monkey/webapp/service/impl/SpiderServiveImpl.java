@@ -3,6 +3,7 @@ package indi.monkey.webapp.service.impl;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -60,8 +61,14 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 			List<TaobaoShop> data = taobaoGoods.getData();
 			Set<TaobaoShop> shops = Sets.newHashSet();
 			Set<TaobaoGoods_Bra> goods = Sets.newHashSet();
-
-			data.forEach(shop ->{
+			data.forEach(shop -> {
+				if (shop.getShopId() != null) {
+					shops.add(shop);
+					goods.addAll(shop.getBras());
+					goods.forEach(bra -> {
+						bra.setShop(shop);
+					});
+				}
 			});
 			taobaoShopDao.saveAll(shops);
 			if (goods.size() > 0) {

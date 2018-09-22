@@ -3,11 +3,9 @@ package indi.monkey.webapp.commons.dto;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-import indi.monkey.webapp.commons.pub.util.APPUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

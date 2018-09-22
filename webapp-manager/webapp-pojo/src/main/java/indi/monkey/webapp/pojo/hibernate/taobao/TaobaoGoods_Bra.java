@@ -30,7 +30,7 @@ public class TaobaoGoods_Bra implements Serializable {
 	private Integer id;
 
 	@SerializedName(value = "rateContent", alternate = { "content" })
-	@Column(name = "rateContent", length = 300)
+	@Column(name = "rateContent", length = 1000)
 	private String rateContent;
 
 	@ManyToOne(optional = false)
@@ -43,11 +43,11 @@ public class TaobaoGoods_Bra implements Serializable {
 	private String size;
 
 	@SerializedName(value = "cup")
-	@Column(length = 2)
+	@Column(length = 10)
 	private String cup;
 
 	@SerializedName(value = "color")
-	@Column(length = 15)
+	@Column(length = 20)
 	private String color;
 
 }
