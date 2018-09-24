@@ -15,6 +15,7 @@ import indi.monkey.webapp.commons.annotation.Reserved;
 import indi.monkey.webapp.commons.dto.Request;
 import indi.monkey.webapp.commons.dto.Response;
 import indi.monkey.webapp.commons.dto.SocketResponse;
+import indi.monkey.webapp.commons.pub.util.StringUtils;
 import indi.monkey.webapp.dao.taobao.TaobaoGoods_BraDao;
 import indi.monkey.webapp.dao.taobao.TaobaoModelDao;
 import indi.monkey.webapp.dao.taobao.TaobaoShopDao;
@@ -65,6 +66,10 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 				if (shop.getShopId() != null) {
 					List<TaobaoGoods_Bra> list = shop.getBras();
 					list.forEach(bra -> {
+						String content = bra.getRateContent();
+						content = content.substring(0, Math.min(1000, content.length()));
+						content = StringUtils.filterEmoji(content);
+						bra.setRateContent(content);
 						bra.setShop(shop);
 					});
 					shops.add(shop);

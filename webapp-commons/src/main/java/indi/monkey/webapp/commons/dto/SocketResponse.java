@@ -24,6 +24,10 @@ public class SocketResponse<T> implements Serializable {
 	private String status;
 	@SerializedName(value = "msg", alternate = { "message" })
 	private String msg;
+
+	@SerializedName(value = "saveFlag")
+	private String saveFlag;
+
 	@SerializedName(value = "data")
 	private T data;
 

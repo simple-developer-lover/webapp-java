@@ -28,7 +28,8 @@ public class DataSourceConfig {
 		Properties properties = new Properties();
 		properties.load(new FileInputStream(new File(propertyFile)));
 		logger.error(properties.getProperty("hibernate.jdbcUrl"));
-		String jdbcUrl = properties.getProperty("hibernate.jdbcUrl", "jdbc:mysql://localhost:3306/webapp_spider?useUnicode=true&characterEncoding=utf8mb4");
+		String jdbcUrl = properties.getProperty("hibernate.jdbcUrl",
+				"jdbc:mysql://localhost:3306/webapp_spider?useUnicode=true&characterEncoding=utf8mb4&useSSL=false");
 		String driverClass = properties.getProperty("hibernate.driverClass", "com.mysql.jdbc.Driver");
 		String username = properties.getProperty("hibernate.username", "root");
 		String password = properties.getProperty("hibernate.password", "root");

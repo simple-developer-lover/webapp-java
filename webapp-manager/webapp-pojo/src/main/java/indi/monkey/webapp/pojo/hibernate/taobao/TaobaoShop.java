@@ -41,7 +41,7 @@ public class TaobaoShop implements Serializable {
 	@Column(name = "shop_id", length = 20)
 	private String shopId;
 
-	@Column(length = 30)
+	@Column(length = 30, name = "seller_id")
 	@SerializedName(value = "seller_id", alternate = { "sellerId", "user_id" })
 	private String sellerId;
 
@@ -58,11 +58,6 @@ public class TaobaoShop implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		TaobaoShop other = (TaobaoShop) obj;
-		if (sellerId == null) {
-			if (other.sellerId != null)
-				return false;
-		} else if (!sellerId.equals(other.sellerId))
-			return false;
 		if (shopId == null) {
 			if (other.shopId != null)
 				return false;
@@ -75,7 +70,6 @@ public class TaobaoShop implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((sellerId == null) ? 0 : sellerId.hashCode());
 		result = prime * result + ((shopId == null) ? 0 : shopId.hashCode());
 		return result;
 	}

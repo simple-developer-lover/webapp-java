@@ -22,4 +22,17 @@ public class StringUtils extends org.springframework.util.StringUtils {
 	public static String replace(String s, String oldValue, String newValue) {
 		return s.replace(oldValue, newValue);
 	}
+
+	public static String filterEmoji(String content) {
+		byte[] b_text = content.getBytes();
+		for (int i = 0; i < b_text.length; i++) {
+			if ((b_text[i] & 0xF8) == 0xF0) {
+				for (int j = 0; j < 4; j++) {
+					b_text[i + j] = 0x30;
+				}
+				i += 3;
+			}
+		}
+		return new String(b_text);
+	}
 }
