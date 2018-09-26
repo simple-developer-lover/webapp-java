@@ -45,8 +45,6 @@ public class TaobaoShop implements Serializable {
 	@SerializedName(value = "seller_id", alternate = { "sellerId", "user_id" })
 	private String sellerId;
 
-	@OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@SerializedName(value = "bras")
 	private List<TaobaoGoods_Bra> bras;
 
 	@Override

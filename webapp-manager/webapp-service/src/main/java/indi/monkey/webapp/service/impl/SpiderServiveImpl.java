@@ -70,7 +70,8 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 						content = content.substring(0, Math.min(1000, content.length()));
 						content = StringUtils.filterEmoji(content);
 						bra.setRateContent(content);
-						bra.setShop(shop);
+						bra.setShop_id(shop.getShopId());
+						bra.setSellerId(shop.getSellerId());
 					});
 					shops.add(shop);
 					bras.addAll(list);

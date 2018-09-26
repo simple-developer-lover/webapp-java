@@ -49,8 +49,12 @@ public class TaobaoGoods_Bra implements Serializable {
 	@Column(name = "auctionSku", length = 40)
 	private String auctionSku;
 	
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "shop_id", referencedColumnName = "shop_id", foreignKey = @ForeignKey(name = "shop_id"))
+	@Column(length =20)
 	@SerializedName(value = "shopId")
-	private TaobaoShop shop;
+	private String shop_id;
+	
+	@Column(length = 30, name = "seller_id")
+	@SerializedName(value = "seller_id", alternate = { "sellerId", "user_id" })
+	private String sellerId;
+	
 }
