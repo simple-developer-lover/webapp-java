@@ -19,14 +19,6 @@
 		<version>2.0.5.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	
-	<modules>
-		<module>webapp-web</module>
-		<module>webapp-proxy</module>
-		<module>webapp-service</module>
-		<module>webapp-dao</module>
-		<module>webapp-pojo</module>
-	</modules>
 	<dependencies>
 		<dependency>
 			<groupId>indi.monkey.webapp</groupId>
