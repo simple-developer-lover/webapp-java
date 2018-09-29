@@ -45,7 +45,7 @@ public class TaobaoShop implements Serializable {
 	@SerializedName(value = "seller_id", alternate = { "sellerId", "user_id" })
 	private String sellerId;
 
-	private List<TaobaoGoods_Bra> bras;
+	private transient List<TaobaoGoods_Bra> bras;
 
 	@Override
 	public boolean equals(Object obj) {
