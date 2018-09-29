@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>FemaleBras</title>
+<script type="text/javascript" src='/js/jquery.min.js'></script>
+<script type="text/javascript" src='/js/echarts.js'></script>
+<script type="text/javascript" th:inline="javascript">
+	var result_data_all = {};
+	var basePath = [[${basePath}]];
+	var service = [[${service}]];
+</script>
+<script type="text/javascript" src='/js/spider/taobaoGoods.js'></script>
+<script type="text/javascript" src='/js/spider/spider.js'></script>
+</head>
+<body>
+	<div>
+		<input type="text" onblur='sendData(this)' action-Type="taobaoGoods" />
+	</div>
+	<div id="spiderData">
+		<!-- data for json result ...... about shop_name & picture -->
+		<div id="goods_data"></div>
+		<!-- wordcloud picture .... default all data...if a shop element is clicked , there will be 
+			a wordcloud about this shop
+		 -->
+		<div id="wordcloud"></div>
+		<!-- word frequency .... draw by echart.js....
+			this data is about ....
+		 -->
+		<div id="cavans_div"></div>
+	</div>
+</body>
+</html>
