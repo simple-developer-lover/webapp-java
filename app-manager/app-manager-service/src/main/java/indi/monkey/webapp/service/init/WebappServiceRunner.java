@@ -88,7 +88,9 @@ public class WebappServiceRunner implements ApplicationRunner {
 		for (Field f : clazz.getDeclaredFields()) {
 			if (f.getType().isAssignableFrom(MethodAccessLoader.class)) {
 				try {
+					f.setAccessible(true);
 					f.set(service, loader);
+					f.setAccessible(false);
 					logger.info("method loader init success.....");
 				} catch (Exception e) {
 					logger.error("method loader init error", e);
