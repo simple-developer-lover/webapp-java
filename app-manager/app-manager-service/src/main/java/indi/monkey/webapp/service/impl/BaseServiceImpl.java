@@ -21,7 +21,7 @@ public class BaseServiceImpl implements BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(BaseServiceImpl.class);
 
 	// protected Map<String, Method> methods = Maps.newHashMap();
-	MethodAccessLoader loader = null;
+	protected MethodAccessLoader loader = null;
 
 	@Resource
 	ServiceJumper jumper;
@@ -48,7 +48,7 @@ public class BaseServiceImpl implements BaseService {
 		logger.info("{} execute method:{} for args:{}", this.getClass().getName(), actionType,
 				JSON.toJSONString(request));
 		try {
-			return loader.invoke(actionType, Response.class, null);
+			return loader.invoke(actionType, Response.class, request);
 		} catch (Exception e) {
 			Response<Object> response = Response.builder().exception(e).status(199).build();
 			return response;

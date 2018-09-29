@@ -25,7 +25,6 @@ import lombok.Cleanup;
 public class FileServiceImpl implements FileService {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
-	protected Map<String, Method> methods = Maps.newHashMap();
 
 	@Override
 	public boolean canService(String actionType, HttpServletRequest request, HttpServletResponse response) {

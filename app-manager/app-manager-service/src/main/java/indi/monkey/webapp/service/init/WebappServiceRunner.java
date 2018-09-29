@@ -56,10 +56,10 @@ public class WebappServiceRunner implements ApplicationRunner {
 		}
 		resolveProxy();
 		initBaseService();
-		initFileService();
+//		initFileService();
 	}
 
-	protected void initBaseService() {
+	protected void initBaseService() throws Exception {
 		Collection<BaseService> beans = serviceContext.getBeans(null);
 		for (BaseService service : beans) {
 			assignMethods(service);
@@ -69,7 +69,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 	@Resource
 	FileServiceContext fileServiceContext;
 
-	protected void initFileService() {
+	protected void initFileService() throws Exception {
 		Collection<FileService> beans = fileServiceContext.getBeans(null);
 		for (FileService service : beans) {
 			assignMethods(service);
@@ -80,8 +80,9 @@ public class WebappServiceRunner implements ApplicationRunner {
 	 * 给service对象赋值
 	 * 
 	 * @param service
+	 * @throws Exception
 	 */
-	private void assignMethods(Object service) {
+	private void assignMethods(Object service) throws Exception {
 		Class<?> clazz = service.getClass();
 		MethodAccessLoader loader = new MethodAccessLoader(clazz);
 		for (Field f : clazz.getDeclaredFields()) {
@@ -90,8 +91,8 @@ public class WebappServiceRunner implements ApplicationRunner {
 					f.set(service, loader);
 					logger.info("method loader init success.....");
 				} catch (Exception e) {
-					e.printStackTrace();
 					logger.error("method loader init error", e);
+					throw e;
 				}
 				break;
 			}
