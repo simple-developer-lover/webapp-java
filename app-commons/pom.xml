@@ -26,6 +26,14 @@
 	</properties>
 	<!-- 依赖工具类的jar包 -->
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/com.esotericsoftware/reflectasm -->
+		<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>reflectasm</artifactId>
+			<version>1.11.7</version>
+		</dependency>
+
+
 		<!-- https://mvnrepository.com/artifact/cglib/cglib -->
 		<dependency>
 			<groupId>cglib</groupId>
