@@ -1,13 +1,7 @@
 package indi.monkey.webapp.service.init;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -19,9 +13,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Maps;
 
-import indi.monkey.webapp.commons.annotation.HandlerMethod;
 import indi.monkey.webapp.commons.annotation.Reserved;
 import indi.monkey.webapp.commons.loader.MethodAccessLoader;
 import indi.monkey.webapp.proxy.context.ProxyContext;
@@ -38,10 +30,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(WebappServiceRunner.class);
 
-	private static final String MAPPING_SEPARATOR = ".";
 	public static final String METHODS_NAME = "methods";
-	private static final String BASE_METHOD_CANSERVICE = "canService";
-	private static final String BASE_METHOD_SERVICE = "service";
 
 	@Resource
 	ServiceContext serviceContext;
@@ -54,15 +43,18 @@ public class WebappServiceRunner implements ApplicationRunner {
 		if (logger.isDebugEnabled()) {
 			logger.debug(JSON.toJSONString(args));
 		}
-		resolveProxy();
 		initBaseService();
 //		initFileService();
 	}
 
 	protected void initBaseService() throws Exception {
 		Collection<BaseService> beans = serviceContext.getBeans(null);
+		if (beans.isEmpty()) {
+			return;
+		}
 		for (BaseService service : beans) {
 			assignMethods(service);
+			resolveProxy(service);
 		}
 	}
 
@@ -84,42 +76,45 @@ public class WebappServiceRunner implements ApplicationRunner {
 	 */
 	private void assignMethods(Object service) throws Exception {
 		Class<?> clazz = service.getClass();
+		if (clazz.isInterface()) {
+			return;
+		}
 		MethodAccessLoader loader = new MethodAccessLoader(clazz);
-		for (Field f : clazz.getDeclaredFields()) {
-			if (f.getType().isAssignableFrom(MethodAccessLoader.class)) {
-				try {
-					f.setAccessible(true);
-					f.set(service, loader);
-					f.setAccessible(false);
-					logger.info("method loader init success.....");
-				} catch (Exception e) {
-					logger.error("method loader init error", e);
-					throw e;
+		while (!clazz.isInterface() && clazz != Object.class) {
+			for (Field f : clazz.getDeclaredFields()) {
+				if (f.getType().isAssignableFrom(MethodAccessLoader.class)) {
+					try {
+						f.setAccessible(true);
+						f.set(service, loader);
+						f.setAccessible(false);
+						logger.info("method loader init success.....");
+						break;
+					} catch (Exception e) {
+						logger.error("method loader init error", e);
+						throw e;
+					}
 				}
-				break;
 			}
+			clazz = clazz.getSuperclass();
 		}
 	}
 
-	protected void resolveProxy() {
-		Collection<BaseService> services = serviceContext.getBeans(null);
-		if (services.size() == 0) {
-			return;
-		}
-		for (BaseService service : services) {
-			Field[] fields = service.getClass().getDeclaredFields();
-			for (Field f : fields) {
-				if (f.getAnnotation(Reserved.class) != null) {
-					Object bean = proxyContext.getBean(f.getType());
+	protected void resolveProxy(Object service) {
+		Field[] fields = service.getClass().getDeclaredFields();
+		for (Field f : fields) {
+			if (f.getAnnotation(Reserved.class) != null) {
+				Object bean = proxyContext.getBean(f.getType());
+				try {
 					f.setAccessible(true);
-					try {
-						f.set(service, f.getType().cast(bean));
-					} catch (Exception e) {
-					}
+					f.set(service, f.getType().cast(bean));
 					f.setAccessible(false);
+					logger.info("{} service proxy init success...for proxy {}", service.getClass().getName(),
+							bean.getClass().getName());
+					break;
+				} catch (Exception e) {
+					logger.error("{} service proxy init error", e);
 				}
 			}
 		}
-
 	}
 }

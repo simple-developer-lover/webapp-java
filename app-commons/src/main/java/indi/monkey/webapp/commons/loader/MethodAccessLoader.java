@@ -21,6 +21,7 @@ public class MethodAccessLoader {
 	 * 
 	 * @param type
 	 */
+	@SuppressWarnings("deprecation")
 	public MethodAccessLoader(Class<?> type) {
 		access = MethodAccess.get(type);
 		try {
