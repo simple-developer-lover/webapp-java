@@ -23,6 +23,7 @@ import com.google.common.collect.Maps;
 
 import indi.monkey.webapp.commons.annotation.HandlerMethod;
 import indi.monkey.webapp.commons.annotation.Reserved;
+import indi.monkey.webapp.commons.loader.MethodAccessLoader;
 import indi.monkey.webapp.proxy.context.ProxyContext;
 import indi.monkey.webapp.service.BaseService;
 import indi.monkey.webapp.service.FileService;
@@ -82,51 +83,18 @@ public class WebappServiceRunner implements ApplicationRunner {
 	 */
 	private void assignMethods(Object service) {
 		Class<?> clazz = service.getClass();
-		String suffix = null;
-		Predicate<Method> p = m -> m.getAnnotation(Override.class) != null
-				|| m.getAnnotation(HandlerMethod.class) != null && !BASE_METHOD_CANSERVICE.equals(m.getName())
-						&& !BASE_METHOD_SERVICE.equals(m.getName());
-		Map<String, Method> methodMap = Maps.newHashMap();
-		for (; clazz != null; clazz = clazz.getSuperclass()) {
-			Method[] ms = clazz.getDeclaredMethods();
-			HandlerMethod mapping = clazz.getAnnotation(HandlerMethod.class);
-			if (mapping != null && !"".equals(mapping.value())) {
-				suffix = mapping.value();
-			}
-			if (ms != null && ms.length > 0) {
-				List<Method> list = Arrays.asList(ms).stream().filter(p).collect(Collectors.toList());
-				for (Method m : list) {
-					HandlerMethod annotation = m.getAnnotation(HandlerMethod.class);
-					if (annotation != null) {
-						String key = suffix == null ? annotation.value()
-								: suffix + MAPPING_SEPARATOR + annotation.value();
-						methodMap.put(key, m);
-					}
+		MethodAccessLoader loader = new MethodAccessLoader(clazz);
+		for (Field f : clazz.getDeclaredFields()) {
+			if (f.getType().isAssignableFrom(MethodAccessLoader.class)) {
+				try {
+					f.set(service, loader);
+					logger.info("method loader init success.....");
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.error("method loader init error", e);
 				}
-			}
-		}
-
-		Field declaredField = null;
-		for (clazz = service.getClass(); clazz != null; clazz = clazz.getSuperclass()) {
-			try {
-				declaredField = clazz.getDeclaredField(METHODS_NAME);
 				break;
-			} catch (Exception e) {
 			}
-		}
-		if (declaredField != null) {
-			declaredField.setAccessible(true);
-			try {
-				declaredField.set(service, methodMap);
-			} catch (IllegalAccessException e) {
-				logger.error("assign error !!! for service:{},fileName:{},paramValue:{}", service.getClass().getName(),
-						METHODS_NAME, methodMap);
-			}
-			declaredField.setAccessible(false);
-			logger.info("methods init success, class is :{} , methods size :{}", service.getClass().getName(),
-					methodMap.size());
-		} else {
-			logger.info("methods init error, class is :{}", service.getClass().getName());
 		}
 	}
 

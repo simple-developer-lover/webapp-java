@@ -29,7 +29,7 @@ public class TestReflect {
 		System.out.println("==========================");
 		
 		startTime = System.currentTimeMillis();
-		MethodAccess access = MethodAccess.get(TestBean.class);// 生成字节码的方式创建UserServiceMethodAccess
+		MethodAccess access = MethodAccess.get(TestBean.class);
 		for (int i = 0; i < 100000000; i++) {
 			access.invoke(bean, "getName");
 		}

@@ -1,20 +1,17 @@
 package indi.monkey.webapp.service.impl;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Maps;
 
 import indi.monkey.webapp.commons.annotation.AppService;
 import indi.monkey.webapp.commons.annotation.HandlerMethod;
 import indi.monkey.webapp.commons.dto.Request;
 import indi.monkey.webapp.commons.dto.Response;
+import indi.monkey.webapp.commons.loader.MethodAccessLoader;
 import indi.monkey.webapp.service.BaseService;
 import indi.monkey.webapp.service.context.ServiceJumper;
 
@@ -23,7 +20,8 @@ public class BaseServiceImpl implements BaseService {
 
 	private static final Logger logger = LoggerFactory.getLogger(BaseServiceImpl.class);
 
-	protected Map<String, Method> methods = Maps.newHashMap();
+	// protected Map<String, Method> methods = Maps.newHashMap();
+	MethodAccessLoader loader = null;
 
 	@Resource
 	ServiceJumper jumper;
@@ -41,7 +39,7 @@ public class BaseServiceImpl implements BaseService {
 
 	@Override
 	public boolean canService(Request request) {
-		return methods.containsKey(request.getActionName());
+		return loader.contains(request.getActionName());
 	}
 
 	@Override
@@ -49,10 +47,8 @@ public class BaseServiceImpl implements BaseService {
 		String actionType = request.getActionName();
 		logger.info("{} execute method:{} for args:{}", this.getClass().getName(), actionType,
 				JSON.toJSONString(request));
-		Method method = methods.get(actionType);
 		try {
-			Object invoke = method.invoke(this, request);
-			return (Response<?>) invoke;
+			return loader.invoke(actionType, Response.class, null);
 		} catch (Exception e) {
 			Response<Object> response = Response.builder().exception(e).status(199).build();
 			return response;
