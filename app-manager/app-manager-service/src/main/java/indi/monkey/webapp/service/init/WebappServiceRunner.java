@@ -30,8 +30,6 @@ public class WebappServiceRunner implements ApplicationRunner {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(WebappServiceRunner.class);
 
-	public static final String METHODS_NAME = "methods";
-
 	@Resource
 	ServiceContext serviceContext;
 
@@ -53,8 +51,8 @@ public class WebappServiceRunner implements ApplicationRunner {
 			return;
 		}
 		for (BaseService service : beans) {
-			assignMethods(service);
 			resolveProxy(service);
+			assignMethods(service);
 		}
 	}
 

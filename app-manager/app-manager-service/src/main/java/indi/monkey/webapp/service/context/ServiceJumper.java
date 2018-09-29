@@ -9,19 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSON;
-
 import indi.monkey.webapp.commons.dto.Request;
 import indi.monkey.webapp.commons.dto.Response;
 import indi.monkey.webapp.service.BaseService;
 import indi.monkey.webapp.service.FileService;
-
-import static indi.monkey.webapp.service.init.WebappServiceRunner.METHODS_NAME;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Map;
-
 
 /**
  * 服务层跳转
@@ -44,42 +35,29 @@ public class ServiceJumper {
 	/**
 	 * 服务层跳转。
 	 * 
-	 * @param service：
-	 *            id、name、serviceClass
-	 * @param methodName：
-	 *            handlerMethod。value()
-	 * @param request：
-	 *            data
+	 * @param service： id、name、serviceClass
+	 * @param methodName： handlerMethod。value()
+	 * @param request： data
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public Response<?> jump(Object service, String methodName, Request request) {
 		long startTime = System.currentTimeMillis();
 		BaseService bean = serviceContext.getBean(service);
 		try {
-			Field field = bean.getClass().getDeclaredField(METHODS_NAME);
-			Map<String, Method> methods = Map.class.cast(field.get(bean));
-			if (methods.containsKey(methodName)) {
-				try {
-					Response<?> response = (Response<?>) methods.get(methodName).invoke(bean, request);
-					response.setTime(System.currentTimeMillis() - startTime);
-					logger.info("jump response:{}", JSON.toJSONString(response));
-					return response;
-				} catch (Exception e) {
-					logger.info("jump error:{}", JSON.toJSONString(e));
-				}
+			if (bean.canService(request)) {
+				return bean.service(request);
 			}
-			logger.info("can't execute method, cause there is no method name:{} in methods", methodName);
+			logger.info("can't execute method:{}", methodName);
 		} catch (Exception e) {
-			logger.info("can't jump service, cause cannot get field:{}", METHODS_NAME);
+			logger.error("jump service error...", e);
 		}
 		return Response.of(199, System.currentTimeMillis() - startTime);
 	}
 
 	/**
-	 * @param serviceType：
-	 *            因为取不到class类型的值，所以这里就按照serviceName去获取service，值为String类型
-	 * @param actionType：被handlerMethod修饰的方法名
+	 * @param          serviceType：
+	 *                 因为取不到class类型的值，所以这里就按照serviceName去获取service，值为String类型
+	 * @param          actionType：被handlerMethod修饰的方法名
 	 * @param request
 	 * @param response
 	 */

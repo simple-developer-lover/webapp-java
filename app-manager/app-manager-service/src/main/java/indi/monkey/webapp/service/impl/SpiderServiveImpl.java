@@ -1,7 +1,6 @@
 package indi.monkey.webapp.service.impl;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,6 @@ import indi.monkey.webapp.dao.taobao.TaobaoGoods_BraDao;
 import indi.monkey.webapp.dao.taobao.TaobaoModelDao;
 import indi.monkey.webapp.dao.taobao.TaobaoShopDao;
 import indi.monkey.webapp.dao.tieba.TiebaUserDao;
-import indi.monkey.webapp.pojo.hibernate.taobao.Model_pic;
 import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoGoods_Bra;
 import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoShop;
 import indi.monkey.webapp.pojo.hibernate.tieba.TiebaUser;

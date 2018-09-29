@@ -77,8 +77,9 @@ public class WebappControllerRunner implements ApplicationRunner {
 				}
 				declaredField.setAccessible(true);
 				try {
-					declaredField.set(controller,
-							serviceContext.getBeans(serviceTypes.toArray()).toArray(new BaseService[] {}));
+					BaseService[] services = serviceContext.getBeans(serviceTypes.toArray())
+							.toArray(new BaseService[] {});
+					declaredField.set(controller, services);
 				} catch (IllegalAccessException e) {
 					logger.error("assign error !!! for controller:{},fileName:{},paramValue:{}",
 							controller.getClass().getName(), SERVICES_NAME);
