@@ -40,8 +40,7 @@ public class DataSourceConfig {
 
 	@Bean(name = "hibernateDataSource")
 	public DriverDataSource hibernateDataSource() throws IOException {
-		String jdbcUrl = properties.getProperty("hibernate.jdbcUrl",
-				"jdbc:mysql://localhost:3306/webapp_spider?useUnicode=true&characterEncoding=utf8mb4&useSSL=false");
+		String jdbcUrl = properties.getProperty("hibernate.jdbcUrl", "jdbc:mysql://localhost:3306/webapp_spider");
 		String driverClass = properties.getProperty("hibernate.driverClass", "com.mysql.jdbc.Driver");
 		String username = properties.getProperty("hibernate.username", "root");
 		String password = properties.getProperty("hibernate.password", "root");
