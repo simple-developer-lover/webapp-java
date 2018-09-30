@@ -21,14 +21,10 @@ public class MethodAccessLoader {
 	 * 
 	 * @param type
 	 */
-	@SuppressWarnings("deprecation")
-	public MethodAccessLoader(Class<?> type) {
+	public MethodAccessLoader(Object obj) {
+		this.obj = obj;
+		Class<?> type = obj.getClass();
 		access = MethodAccess.get(type);
-		try {
-			obj = type.newInstance();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		Method[] ms = type.getDeclaredMethods();
 		methods_index = Arrays.stream(ms).filter(m -> {
 			return !Modifier.isPrivate(m.getModifiers()) && m.getAnnotation(HandlerMethod.class) != null;

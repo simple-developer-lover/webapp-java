@@ -21,7 +21,7 @@ public class CommonsContext<T> implements ApplicationContextAware {
 
 	public void init() {
 		Class<T> type = APPUtil.getGenericType(this.getClass());
-		beanMap = applicationContext.getBeansOfType(type, false, true);
+		beanMap = applicationContext.getBeansOfType(type, true, true);
 		if (beanMap == null) {
 			beanMap = Maps.newHashMap();
 			return;

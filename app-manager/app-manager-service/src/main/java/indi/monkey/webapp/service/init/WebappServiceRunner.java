@@ -51,7 +51,9 @@ public class WebappServiceRunner implements ApplicationRunner {
 			return;
 		}
 		for (BaseService service : beans) {
-			resolveProxy(service);
+			if (!resolveProxy(service)) {
+				logger.warn("service proxy init warn,this is no proxy in service:{}", service.getClass().getName());
+			}
 			assignMethods(service);
 		}
 	}
@@ -77,7 +79,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 		if (clazz.isInterface()) {
 			return;
 		}
-		MethodAccessLoader loader = new MethodAccessLoader(clazz);
+		MethodAccessLoader loader = new MethodAccessLoader(service);
 		while (!clazz.isInterface() && clazz != Object.class) {
 			for (Field f : clazz.getDeclaredFields()) {
 				if (f.getType().isAssignableFrom(MethodAccessLoader.class)) {
@@ -85,10 +87,11 @@ public class WebappServiceRunner implements ApplicationRunner {
 						f.setAccessible(true);
 						f.set(service, loader);
 						f.setAccessible(false);
-						logger.info("method loader init success.....");
+						logger.info("MethodAccessLoader loader init success.....service:{}",
+								service.getClass().getName());
 						break;
 					} catch (Exception e) {
-						logger.error("method loader init error", e);
+						logger.error("MethodAccessLoader loader init error", e);
 						throw e;
 					}
 				}
@@ -97,22 +100,26 @@ public class WebappServiceRunner implements ApplicationRunner {
 		}
 	}
 
-	protected void resolveProxy(Object service) {
+	protected boolean resolveProxy(Object service) {
 		Field[] fields = service.getClass().getDeclaredFields();
 		for (Field f : fields) {
 			if (f.getAnnotation(Reserved.class) != null) {
 				Object bean = proxyContext.getBean(f.getType());
+				if (bean == null) {
+					continue;
+				}
 				try {
 					f.setAccessible(true);
-					f.set(service, f.getType().cast(bean));
+					f.set(service, bean);
 					f.setAccessible(false);
 					logger.info("{} service proxy init success...for proxy {}", service.getClass().getName(),
 							bean.getClass().getName());
-					break;
+					return true;
 				} catch (Exception e) {
 					logger.error("{} service proxy init error", e);
 				}
 			}
 		}
+		return false;
 	}
 }
