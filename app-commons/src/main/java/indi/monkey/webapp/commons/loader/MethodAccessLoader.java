@@ -17,9 +17,8 @@ public class MethodAccessLoader {
 	private Object obj;
 
 	/**
-	 * init
 	 * 
-	 * @param type
+	 * @param obj
 	 */
 	public MethodAccessLoader(Object obj) {
 		this.obj = obj;
