@@ -26,8 +26,8 @@ public class Request implements Serializable {
 	/**
 	 * 
 	 */
-	transient private static Gson gson = new Gson();
-
+	transient private static Gson GSON = new Gson();
+	transient private static final String SESSION_ID_KEY = "sessionId";
 	private static final long serialVersionUID = 5960932972846007724L;
 	private int requestId;
 	private String sessionId;
@@ -43,11 +43,11 @@ public class Request implements Serializable {
 			Entry<String, String[]> e = it.next();
 			String[] value = e.getValue();
 			if (value != null && value.length > 0) {
-				if ("sessionId".equals(e.getKey())) {
+				if (SESSION_ID_KEY.equals(e.getKey())) {
 					sessionId = e.getValue()[0];
 				} else {
 					if (value.length > 1) {
-						data.put(e.getKey(), gson.toJson(value));
+						data.put(e.getKey(), GSON.toJson(value));
 					} else {
 						data.put(e.getKey(), value[0]);
 					}
@@ -55,7 +55,7 @@ public class Request implements Serializable {
 			}
 		}
 		if (StringUtils.isEmpty(sessionId)) {
-			Object obj = request.getSession().getAttribute("sessionId");
+			Object obj = request.getSession().getAttribute(SESSION_ID_KEY);
 			if (obj != null) {
 				sessionId = obj.toString();
 			}

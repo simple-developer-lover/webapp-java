@@ -80,6 +80,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 			return;
 		}
 		MethodAccessLoader loader = new MethodAccessLoader(service);
+
 		while (!clazz.isInterface() && clazz != Object.class) {
 			for (Field f : clazz.getDeclaredFields()) {
 				if (f.getType().isAssignableFrom(MethodAccessLoader.class)) {
