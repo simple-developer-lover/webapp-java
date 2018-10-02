@@ -15,6 +15,7 @@ public class MethodAccessLoader {
 	private Map<String, Integer> methods_index;
 	private MethodAccess access;
 	private Object obj;
+	transient private static final String BREAK_POINT = ".";
 
 	/**
 	 * 
@@ -24,11 +25,13 @@ public class MethodAccessLoader {
 		this.obj = obj;
 		Class<?> type = obj.getClass();
 		access = MethodAccess.get(type);
+		HandlerMethod handlerMethod = obj.getClass().getAnnotation(HandlerMethod.class);
+		final String suffix = handlerMethod == null ? "" : handlerMethod.value();
 		Method[] ms = type.getDeclaredMethods();
 		methods_index = Arrays.stream(ms).filter(m -> {
 			return !Modifier.isPrivate(m.getModifiers()) && m.getAnnotation(HandlerMethod.class) != null;
-		}).collect(
-				Collectors.toMap(m -> m.getAnnotation(HandlerMethod.class).value(), m -> access.getIndex(m.getName())));
+		}).collect(Collectors.toMap(m -> suffix + BREAK_POINT + m.getAnnotation(HandlerMethod.class).value(),
+				m -> access.getIndex(m.getName())));
 	}
 
 	/**

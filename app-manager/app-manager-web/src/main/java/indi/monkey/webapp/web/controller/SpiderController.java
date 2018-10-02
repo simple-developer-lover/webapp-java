@@ -13,11 +13,11 @@ import indi.monkey.webapp.commons.annotation.ExecuteService;
 import indi.monkey.webapp.commons.dto.Request;
 import indi.monkey.webapp.commons.dto.Response;
 import indi.monkey.webapp.service.impl.SpiderServiveImpl;
-
+import indi.monkey.webapp.service.impl.TaobaoSpiderImpl;
 
 @RequestMapping("/spider")
 @Controller
-@ExecuteService(executeClasses = SpiderServiveImpl.class)
+@ExecuteService(executeClasses = { SpiderServiveImpl.class, TaobaoSpiderImpl.class })
 public class SpiderController extends BaseController {
 
 	@RequestMapping(value = "/{serviceName}", method = { RequestMethod.POST })
@@ -33,4 +33,5 @@ public class SpiderController extends BaseController {
 		page = "spider/" + page;
 		return super.page(page, request, response);
 	}
+
 }
