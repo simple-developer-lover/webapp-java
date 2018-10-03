@@ -9,14 +9,23 @@ function sendData(t) {
 	console.log(requestUrl);
 	$.post(requestUrl, data, function(result) {
 		if (result && result.status == 200) {
-			var data = JSON.parse(result.data);
+			var data = {};
+			if (typeof result.data == 'string') {
+				try {
+					data = JSON.parse(result.data);
+				} catch (e) {
+					alert(e);
+				}
+			} else {
+				data = result.data;
+			}
 			result_data_all = data;
 			var spider = eval('(' + actionType + ')')
 			new spider().load(data);
 		} else {
 			alert("error!!!");
 		}
-		$(t).attr("onblur", "sendUrl(this)");
+		$(t).attr("onblur", "sendData(this)");
 	});
 }
 

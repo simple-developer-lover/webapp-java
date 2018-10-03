@@ -70,10 +70,12 @@ public class BaseController {
 				try {
 					Response<?> resp = service.service(request);
 					resp.setTime(System.currentTimeMillis() - startTime);
-					logger.info("service execute success, response data:{}", JSON.toJSONString(resp));
+					String respStr = JSON.toJSONString(resp);
+					logger.info("service execute success, response data:{} ...",
+							respStr.substring(0, Math.min(100, respStr.length())));
 					return resp;
 				} catch (Exception e) {
-					logger.info("service execute error, cause exception is :{}", JSON.toJSONString(e.getMessage()));
+					logger.error("service execute error...", e);
 					throw new RuntimeException(
 							"service execute error, cause exception is :" + JSON.toJSONString(e.getMessage()));
 				}
