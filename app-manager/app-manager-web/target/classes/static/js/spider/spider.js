@@ -7,19 +7,17 @@ function sendData(t) {
 	};
 	var requestUrl = basePath + service + "/" + actionType;
 	console.log(requestUrl);
-	if (query && query.length > 0 && JSON.stringify(result_data_all) == "{}") {
-		$.post(requestUrl, data, function(result) {
-			if (result && result.status == 200) {
-				var data = JSON.parse(result.data);
-				result_data_all = data;
-				var spider = eval('(' + actionType + ')')
-				new spider().load(data);
-			} else {
-				alert("error!!!");
-			}
-			$(t).attr("onblur", "sendUrl(this)");
-		});
-	}
+	$.post(requestUrl, data, function(result) {
+		if (result && result.status == 200) {
+			var data = JSON.parse(result.data);
+			result_data_all = data;
+			var spider = eval('(' + actionType + ')')
+			new spider().load(data);
+		} else {
+			alert("error!!!");
+		}
+		$(t).attr("onblur", "sendUrl(this)");
+	});
 }
 
 function create_lines(lines_data) {

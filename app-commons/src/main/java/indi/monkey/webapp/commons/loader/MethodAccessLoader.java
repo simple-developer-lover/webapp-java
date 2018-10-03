@@ -15,7 +15,7 @@ public class MethodAccessLoader {
 	private Map<String, Integer> methods_index;
 	private MethodAccess access;
 	private Object obj;
-	transient private static final String BREAK_POINT = ".";
+	transient private static final String BREAK_POINT = "-";
 
 	/**
 	 * 
@@ -30,7 +30,8 @@ public class MethodAccessLoader {
 		Method[] ms = type.getDeclaredMethods();
 		methods_index = Arrays.stream(ms).filter(m -> {
 			return !Modifier.isPrivate(m.getModifiers()) && m.getAnnotation(HandlerMethod.class) != null;
-		}).collect(Collectors.toMap(m -> suffix + BREAK_POINT + m.getAnnotation(HandlerMethod.class).value(),
+		}).collect(Collectors.toMap(
+				m -> ("".equals(suffix) ? "" : suffix + BREAK_POINT) + m.getAnnotation(HandlerMethod.class).value(),
 				m -> access.getIndex(m.getName())));
 	}
 

@@ -25,12 +25,6 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 	
 	
 
-	@Override
-	public Response<?> service(Request request) {
-		return super.service(request);
-	}
-
-
 
 	@HandlerMethod("baiduTieba")
 	public Response<?> baiduTieba(Request request) {
