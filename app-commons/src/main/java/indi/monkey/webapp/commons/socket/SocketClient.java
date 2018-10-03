@@ -50,16 +50,4 @@ public class SocketClient {
 			return false;
 		}
 	}
-
-	/*public static void main(String[] args) {
-		SocketClient client = new SocketClient("localhost", 8888);
-		String sendMsg = client.sendMsg("https://tieba.baidu.com/p/5771313540");
-		JSONObject object = JSON.parseObject(sendMsg);
-		JSONObject data = object.getJSONObject("data");
-		data.forEach((k, v) -> {
-			TiebaUser user = JSON.parseObject(k, TiebaUser.class);
-			System.out.println(JSON.toJSONString(user));
-		});
-		System.out.println(object.getString("picPath"));
-	}*/
 }
