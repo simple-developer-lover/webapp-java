@@ -14,6 +14,9 @@ var taobaoGoods = function() {
 var getTaobaoData = function() {
 	this.load = function(data) {
 		console.info(data);
+		var mycharts = echarts.init(document.getElementById("cavans_div"));
+		mycharts.clear();
+		mycharts.setOption(data,true);
 	}
 }
 

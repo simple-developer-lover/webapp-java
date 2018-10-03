@@ -1,6 +1,6 @@
 package indi.monkey.webapp.service.impl;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -8,6 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
@@ -21,6 +23,7 @@ import indi.monkey.webapp.commons.annotation.Reserved;
 import indi.monkey.webapp.commons.dto.Request;
 import indi.monkey.webapp.commons.dto.Response;
 import indi.monkey.webapp.commons.dto.SocketResponse;
+import indi.monkey.webapp.commons.pub.util.EchartUtils;
 import indi.monkey.webapp.commons.pub.util.StringUtils;
 import indi.monkey.webapp.dao.taobao.TaobaoGoods_BraDao;
 import indi.monkey.webapp.dao.taobao.TaobaoModelDao;
@@ -31,6 +34,8 @@ import indi.monkey.webapp.proxy.SpiderProxy;
 
 @AppService(id = 11, name = "taobaoSpider")
 public class TaobaoSpiderImpl extends BaseServiceImpl {
+
+	private static final Logger logger = LoggerFactory.getLogger(TaobaoSpiderImpl.class);
 
 	@Reserved
 	SpiderProxy spiderProxy;
@@ -83,19 +88,21 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 
 	@HandlerMethod("getTaobaoData")
 	public Response<?> getData(Request req) {
-//		String queryTypes = req.getParam("queryTable");
-		List<TaobaoShop> shops = taobaoShopDao.findAll();
+//		List<TaobaoShop> shops = taobaoShopDao.findAll();
 		Set<String> bra_types = Sets.newHashSet("A", "B", "C", "D", "E", "F", "G");
-		Map<String, Object> resultMap = Maps.newHashMap();
-		resultMap.put("shops", shops);
+		List<Map<String, Object>> lists = Lists.newArrayList();
+//		resultMap.put("shops", shops);
 		for (String type : bra_types) {
-			resultMap.put(type, processBraData(taobaoGoods_braDao.findByCup(type)));
+			Map<String, Object> resultMap = new HashMap<>(2);
+			resultMap.put("name", type);
+			resultMap.put("value", processBraData(taobaoGoods_braDao.findByCup(type)).size());
+			lists.add(resultMap);
 		}
-		return Response.of(resultMap);
+		return Response.of(EchartUtils.createOption("bras", "legend", lists));
 	}
 
 	private String[] processCup(String data) {
-		Pattern p = Pattern.compile("\\\\\\d{2}[A|B|C|D|E|F|G]");
+		Pattern p = Pattern.compile("/\\d{2}[A|B|C|D|E|F|G]");
 		String[] result = new String[2];
 		Matcher matcher = p.matcher(data);
 		if (matcher.matches()) {
@@ -109,6 +116,20 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 		return null;
 	}
 
+	private static final Map<String, String> size_Map = new HashMap<>(6);
+	static {
+		size_Map.put("32", "70");
+		size_Map.put("34", "75");
+		size_Map.put("36", "80");
+		size_Map.put("38", "85");
+		size_Map.put("40", "90");
+		size_Map.put("42", "95");
+	}
+
+	private String processSize(String size) {
+		return size_Map.getOrDefault(size, size);
+	}
+
 	private Set<TaobaoGoods_Bra> processBraData(Set<TaobaoGoods_Bra> bras) {
 		if (CollectionUtils.isEmpty(bras)) {
 			return bras;
@@ -117,7 +138,7 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 			String[] processCup = processCup(s.getCup());
 			if (processCup != null) {
 				s.setCup(processCup[1]);
-				s.setSize(processCup[0]);
+				s.setSize(processSize(processCup[0]));
 			}
 			return s;
 		}).collect(Collectors.toSet());

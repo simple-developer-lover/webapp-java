@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <title>FemaleBras</title>
 <script type="text/javascript" src='/js/jquery.min.js'></script>
-<script type="text/javascript" src='/js/echarts.js'></script>
+<script type="text/javascript" src='/js/echarts/echarts.min.js'></script>
 <script type="text/javascript" th:inline="javascript">
 	var result_data_all = {};
 	var basePath = [[${basePath}]];
@@ -16,8 +16,7 @@
 <body>
 	<div>
 		<input type="text" onblur='sendData(this)' action-Type="taobaoGoods" />
-		<br /> 
-		<input type="button" onclick="sendData(this)"
+		<br /> <input type="button" onclick="sendData(this)"
 			action-Type="getTaobaoData" />
 	</div>
 	<div id="spiderData">
@@ -30,7 +29,9 @@
 		<!-- word frequency .... draw by echart.js....
 			this data is about ....
 		 -->
-		<div id="cavans_div"></div>
+		<div style="padding: 10px; clear: both;">
+			<div id="cavans_div" style="height: 600px"></div>
+		</div>
 	</div>
 </body>
 </html>
