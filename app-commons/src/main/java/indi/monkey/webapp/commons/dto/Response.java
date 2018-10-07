@@ -21,8 +21,6 @@ public class Response<T> implements Serializable {
 	// 响应业务状�??
 	private Integer status;
 
-	private transient boolean success;
-
 	private Long time;
 	// 响应消息
 	private String msg;
