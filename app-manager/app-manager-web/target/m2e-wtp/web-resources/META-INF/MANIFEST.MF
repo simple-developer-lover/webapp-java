@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
-Built-By: tangjf
-Build-Jdk: 10.0.2
 Implementation-Title: app-manager-web
 Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: wb-tjf399322
 Implementation-Vendor-Id: com.cn.webapp
+Build-Jdk: 1.8.0_172
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/app-manager/app-manager-web
 Created-By: Maven Integration for Eclipse

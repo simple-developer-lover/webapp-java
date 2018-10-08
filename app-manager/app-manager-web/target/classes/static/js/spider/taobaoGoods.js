@@ -31,37 +31,36 @@ function buildBarOption(data) {
 
 function buildLineOption(data) {
 	var option = {
-		title : {
-			text : data.title
-		},
-		tooltip : {
-			trigger : 'axis'
-		},
-		legend : {
-			data : data.legend
-		},
-		grid : {
-			left : '3%',
-			right : '4%',
-			bottom : '3%',
-			containLabel : true
-		},
-		toolbox : {
-			feature : {
-				saveAsImage : {}
-			}
-		},
-		xAxis : {
-			type : 'category',
-			boundaryGap : false,
-			data : data.xaxis
-		},
-		yAxis : {
-			type : 'value'
-		},
-		series : data.series
+			title: {
+		        text: data.title
+		    },
+		    tooltip: {
+		        trigger: 'axis'
+		    },
+		    legend: {
+		        data:data.legend
+		    },
+		    grid: {
+		        left: '3%',
+		        right: '4%',
+		        bottom: '3%',
+		        containLabel: true
+		    },
+		    toolbox: {
+		        feature: {
+		            saveAsImage: {}
+		        }
+		    },
+		    xAxis: {
+		        type: 'category',
+		        boundaryGap: false,
+		        data: data.xaxis
+		    },
+		    yAxis: {
+		        type: 'value'
+		    },
+		    series:data.series
 	};
-	return option;
 }
 
 var getTaobaoData = function() {
@@ -71,8 +70,7 @@ var getTaobaoData = function() {
 		bar_charts.clear();
 		bar_charts.setOption(buildBarOption(data.barData));
 		line_cavans.clear();
-		var option = buildLineOption(data.lineData);
-		line_cavans.setOption(option);
+		line_cavans.setOption(buildLineOption(data.lineData));
 	}
 }
 

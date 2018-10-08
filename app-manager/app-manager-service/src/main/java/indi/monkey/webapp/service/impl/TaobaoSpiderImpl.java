@@ -151,7 +151,7 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 		dto.setXAxis(xAxis);
 		series.setData(yAxis);
 		series.setType("bar");
-		dto.setSeries(List.of(series));
+		dto.setSeries(Lists.newArrayList(series));
 		return dto;
 	}
 
