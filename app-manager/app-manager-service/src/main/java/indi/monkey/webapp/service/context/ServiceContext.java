@@ -2,6 +2,7 @@ package indi.monkey.webapp.service.context;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,13 +50,18 @@ public class ServiceContext extends CommonsContext<BaseService> {
 		logger.info("service init end");
 	}
 
+	@SuppressWarnings("unchecked")
 	public BaseService getBean(Object beanType) {
 		if (beanType instanceof Long) {
 			return idServices.get(beanType);
 		} else if (beanType instanceof String) {
 			return nameServices.get(beanType);
 		} else if (beanType instanceof Class) {
-			return clazzServices.get(beanType);
+			for (Entry<Class<? extends BaseService>, BaseService> e : clazzServices.entrySet()) {
+				if (Class.class.cast(beanType).isAssignableFrom(e.getKey())) {
+					return e.getValue();
+				}
+			}
 		}
 		return null;
 	}

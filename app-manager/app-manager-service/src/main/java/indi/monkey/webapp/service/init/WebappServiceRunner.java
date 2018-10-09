@@ -5,8 +5,6 @@ import java.util.Collection;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
@@ -21,15 +19,15 @@ import indi.monkey.webapp.service.BaseService;
 import indi.monkey.webapp.service.FileService;
 import indi.monkey.webapp.service.context.FileServiceContext;
 import indi.monkey.webapp.service.context.ServiceContext;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Order(10)
+@Slf4j
 public class WebappServiceRunner implements ApplicationRunner {
 	/**
 	 * 初始化service中的methods
 	 */
-	private static final Logger logger = LoggerFactory.getLogger(WebappServiceRunner.class);
-
 	@Resource
 	ServiceContext serviceContext;
 
@@ -38,8 +36,8 @@ public class WebappServiceRunner implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		if (logger.isDebugEnabled()) {
-			logger.debug(JSON.toJSONString(args));
+		if (log.isDebugEnabled()) {
+			log.debug(JSON.toJSONString(args));
 		}
 		initBaseService();
 //		initFileService();
@@ -52,7 +50,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 		}
 		for (BaseService service : beans) {
 			if (!resolveProxy(service)) {
-				logger.warn("service proxy init warn,this is no proxy in service:{}", service.getClass().getName());
+				log.warn("service proxy init warn,this is no proxy in service:{}", service.getClass().getName());
 			}
 			assignMethods(service);
 		}
@@ -88,11 +86,11 @@ public class WebappServiceRunner implements ApplicationRunner {
 						f.setAccessible(true);
 						f.set(service, loader);
 						f.setAccessible(false);
-						logger.info("MethodAccessLoader loader init success.....service:{}",
+						log.info("MethodAccessLoader loader init success.....service:{}",
 								service.getClass().getName());
 						break;
 					} catch (Exception e) {
-						logger.error("MethodAccessLoader loader init error", e);
+						log.error("MethodAccessLoader loader init error", e);
 						throw e;
 					}
 				}
@@ -113,11 +111,11 @@ public class WebappServiceRunner implements ApplicationRunner {
 					f.setAccessible(true);
 					f.set(service, bean);
 					f.setAccessible(false);
-					logger.info("{} service proxy init success...for proxy {}", service.getClass().getName(),
+					log.info("{} service proxy init success...for proxy {}", service.getClass().getName(),
 							bean.getClass().getName());
 					return true;
 				} catch (Exception e) {
-					logger.error("{} service proxy init error", e);
+					log.error("{} service proxy init error", e);
 				}
 			}
 		}

@@ -8,14 +8,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
@@ -34,11 +31,11 @@ import indi.monkey.webapp.dao.taobao.TaobaoShopDao;
 import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoGoods_Bra;
 import indi.monkey.webapp.pojo.hibernate.taobao.TaobaoShop;
 import indi.monkey.webapp.proxy.SpiderProxy;
+import lombok.extern.slf4j.Slf4j;
 
 @AppService(id = 11, name = "taobaoSpider")
+@Slf4j
 public class TaobaoSpiderImpl extends BaseServiceImpl {
-
-	private static final Logger logger = LoggerFactory.getLogger(TaobaoSpiderImpl.class);
 
 	@Reserved
 	SpiderProxy spiderProxy;

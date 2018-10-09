@@ -9,19 +9,16 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alibaba.fastjson.JSON;
 
 import indi.monkey.webapp.commons.annotation.AppService;
 import indi.monkey.webapp.service.FileService;
 import lombok.Cleanup;
+import lombok.extern.slf4j.Slf4j;
 
 @AppService(id = 0, name = "default")
+@Slf4j
 public class FileServiceImpl implements FileService {
-
-	private static final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
 	@Override
 	public boolean canService(String actionType, HttpServletRequest request, HttpServletResponse response) {
@@ -48,7 +45,7 @@ public class FileServiceImpl implements FileService {
 						break;
 					}
 				} catch (Exception e) {
-					logger.error("file read fail....getImgCount:{}", getImgCount);
+					log.error("file read fail....getImgCount:{}", getImgCount);
 				}
 				try {
 					Thread.sleep(300);
@@ -60,7 +57,7 @@ public class FileServiceImpl implements FileService {
 				ImageIO.write(bi, "png", outputStream);
 			}
 		} catch (IOException e) {
-			logger.info("file read error:{}", JSON.toJSONString(e));
+			log.info("file read error:{}", JSON.toJSONString(e));
 		}
 	}
 }

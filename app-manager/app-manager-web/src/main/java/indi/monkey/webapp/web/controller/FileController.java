@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import indi.monkey.webapp.service.FileService;
 import indi.monkey.webapp.service.context.ServiceJumper;
-
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 用于文件上传下载的controller
@@ -23,25 +23,25 @@ import indi.monkey.webapp.service.context.ServiceJumper;
  */
 @Controller
 @RequestMapping("/file")
+@Slf4j
 public class FileController {
-	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
-	
+
 	FileService[] services;
-	
+
 	@Autowired
 	ServiceJumper jumper;
 
 	@RequestMapping(value = "/upload", method = { RequestMethod.POST })
-	public void uploadFile( String serviceType,String actionType,
-			HttpServletRequest request, HttpServletResponse response) {
+	public void uploadFile(String serviceType, String actionType, HttpServletRequest request,
+			HttpServletResponse response) {
 		jumper.jump(serviceType, actionType, request, response);
-		logger.info("upload end");
+		log.info("upload end");
 	}
 
 	@RequestMapping(value = "/download", method = { RequestMethod.POST, RequestMethod.GET })
-	public void downloadFile(String serviceType, String actionType,
-			HttpServletRequest request, HttpServletResponse response) {
+	public void downloadFile(String serviceType, String actionType, HttpServletRequest request,
+			HttpServletResponse response) {
 		jumper.jump(serviceType, actionType, request, response);
-		logger.info("download end");
+		log.info("download end");
 	}
 }

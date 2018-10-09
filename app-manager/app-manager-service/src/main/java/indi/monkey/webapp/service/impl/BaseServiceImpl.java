@@ -2,9 +2,6 @@ package indi.monkey.webapp.service.impl;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alibaba.fastjson.JSON;
 
 import indi.monkey.webapp.commons.annotation.AppService;
@@ -14,14 +11,13 @@ import indi.monkey.webapp.commons.dto.Response;
 import indi.monkey.webapp.commons.loader.MethodAccessLoader;
 import indi.monkey.webapp.service.BaseService;
 import indi.monkey.webapp.service.context.ServiceJumper;
+import lombok.extern.slf4j.Slf4j;
 
 @AppService(id = 1, name = "baseService")
+@Slf4j
 public class BaseServiceImpl implements BaseService {
 
-	private static final Logger logger = LoggerFactory.getLogger(BaseServiceImpl.class);
-
-	// protected Map<String, Method> methods = Maps.newHashMap();
-	protected MethodAccessLoader loader = null;
+	protected MethodAccessLoader loader;
 
 	@Resource
 	ServiceJumper jumper;
@@ -45,8 +41,7 @@ public class BaseServiceImpl implements BaseService {
 	@Override
 	public Response<?> service(Request request) {
 		String actionType = request.getActionName();
-		logger.info("{} execute method:{} for args:{}", this.getClass().getName(), actionType,
-				JSON.toJSONString(request));
+		log.info("{} execute method:{} for args:{}", this.getClass().getName(), actionType, JSON.toJSONString(request));
 		try {
 			return loader.invoke(actionType, Response.class, request);
 		} catch (Exception e) {
