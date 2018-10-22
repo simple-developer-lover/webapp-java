@@ -108,6 +108,13 @@
 			<artifactId>fastjson</artifactId>
 			<version>${alibaba.fastjson.version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.14.0</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -153,6 +160,5 @@
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>3.14</version>
 		</dependency>
-
 	</dependencies>
 </project>

@@ -19,10 +19,6 @@ public class StringUtils extends org.springframework.util.StringUtils {
 		return false;
 	}
 
-	public static String replace(String s, String oldValue, String newValue) {
-		return s.replace(oldValue, newValue);
-	}
-
 	public static String filterEmoji(String content) {
 		byte[] b_text = content.getBytes();
 		for (int i = 0; i < b_text.length; i++) {

@@ -35,6 +35,10 @@ public class BaseServiceImpl implements BaseService {
 
 	@Override
 	public boolean canService(Request request) {
+		if (loader == null) {
+			log.error("class:{} method loader init error .... please check it...", this.getClass().getName());
+			return false;
+		}
 		return loader.contains(request.getActionName());
 	}
 

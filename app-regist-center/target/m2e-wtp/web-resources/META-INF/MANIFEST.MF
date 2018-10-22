@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Implementation-Title: app-regist-center
+Implementation-Title: register
 Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: wb-tjf399322
 Implementation-Vendor-Id: com.cn.wenapp
