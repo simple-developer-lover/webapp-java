@@ -7,3 +7,5 @@ server.port=8011
 spring.mvc.view.prefix=/templates
 # \u54CD\u5E94\u9875\u9762\u9ED8\u8BA4\u540E\u7F00
 spring.mvc.view.suffix=.html
+
+eureka.client.service
