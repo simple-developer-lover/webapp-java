@@ -31,7 +31,7 @@ public class Thread4ViableResult {
 			for (int i = 0; i < calls.size(); i++) {
 				t = service.take().get();
 				if (p != null) {
-					if (p.test(t)) {
+					if (t != null && p.test(t)) {
 						break;
 					}
 				} else {
