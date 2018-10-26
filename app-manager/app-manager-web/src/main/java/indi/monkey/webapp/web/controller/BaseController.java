@@ -66,6 +66,7 @@ public class BaseController {
 	
 	/**
 	 * 这里的概念是一样的，都是判断是否canService，然后再处理service逻辑
+	 * 每个业务自己的逻辑可以重写该方法，以适应当前的业务
 	 * @param request
 	 * @return
 	 */
