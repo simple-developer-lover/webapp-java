@@ -30,8 +30,14 @@ public class Thread4ViableResult {
 		try {
 			for (int i = 0; i < calls.size(); i++) {
 				t = service.take().get();
-				if (p.test(t)) {
-					break;
+				if (p != null) {
+					if (p.test(t)) {
+						break;
+					}
+				} else {
+					if (t != null) {
+						break;
+					}
 				}
 			}
 		} catch (InterruptedException e) {

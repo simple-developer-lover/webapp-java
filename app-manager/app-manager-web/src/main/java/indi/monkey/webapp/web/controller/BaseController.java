@@ -63,10 +63,10 @@ public class BaseController {
 	public Response<?> execute(HttpServletRequest request) {
 		return service(Request.of("default", request));
 	}
-	
+
 	/**
-	 * 这里的概念是一样的，都是判断是否canService，然后再处理service逻辑
-	 * 每个业务自己的逻辑可以重写该方法，以适应当前的业务
+	 * 这里的概念是一样的，都是判断是否canService，然后再处理service逻辑 每个业务自己的逻辑可以重写该方法，以适应当前的业务
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -78,14 +78,17 @@ public class BaseController {
 				return null;
 			}
 		} else {
-			Predicate<BaseService> ps = s -> s.canService(request);
+			// Predicate<BaseService> ps = s -> s.canService(request);
 			Set<Callable<BaseService>> ss = Arrays.stream(services).map(s -> new Callable<BaseService>() {
 				@Override
 				public BaseService call() throws Exception {
-					return s;
+					if (s.canService(request)) {
+						return s;
+					}
+					return null;
 				}
 			}).collect(Collectors.toSet());
-			return Thread4ViableResult.execute(ss, Math.min(DEFAULT_EXECUTE_POOL_SIZE, services.length), ps);
+			return Thread4ViableResult.execute(ss, Math.min(DEFAULT_EXECUTE_POOL_SIZE, services.length), null);
 		}
 	}
 
