@@ -10,9 +10,9 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import indi.monkey.webapp.commons.annotation.ReserveProxy;
-import indi.monkey.webapp.commons.context.CommonsContext;
 import indi.monkey.webapp.commons.loader.WebClassLoader;
 import indi.monkey.webapp.commons.pub.util.APPUtil;
+import indi.monkey.webapp.commons.web.context.CommonsContext;
 
 @Component("proxyContext")
 public class ProxyContext extends CommonsContext<Object> {

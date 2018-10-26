@@ -17,7 +17,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import indi.monkey.webapp.commons.annotation.AppService;
-import indi.monkey.webapp.commons.context.CommonsContext;
+import indi.monkey.webapp.commons.web.context.CommonsContext;
 import indi.monkey.webapp.service.BaseService;
 
 @Component(value = "baseServiceContext")

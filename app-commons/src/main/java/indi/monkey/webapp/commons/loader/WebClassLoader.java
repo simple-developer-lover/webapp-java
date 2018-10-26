@@ -80,7 +80,7 @@ public class WebClassLoader extends ClassLoader {
 		return loadClassData(new File(location, name));
 	}
 
-	private static String convert(String dir,String filePath) {
+	private static String convert(String dir, String filePath) {
 		String result = filePath.replace(dir + File.separator, "");
 		result = result.replace('/', '.');
 		result = result.replace('\"', '.');// 将所有的\转成.

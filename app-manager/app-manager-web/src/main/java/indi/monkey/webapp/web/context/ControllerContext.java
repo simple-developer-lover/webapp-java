@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import indi.monkey.webapp.commons.context.CommonsContext;
+import indi.monkey.webapp.commons.web.context.CommonsContext;
 import indi.monkey.webapp.web.controller.BaseController;
 
 

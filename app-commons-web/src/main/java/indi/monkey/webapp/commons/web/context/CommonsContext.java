@@ -1,4 +1,4 @@
-package indi.monkey.webapp.commons.context;
+package indi.monkey.webapp.commons.web.context;
 
 import java.util.Collection;
 import java.util.Map;
