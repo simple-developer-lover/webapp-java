@@ -78,7 +78,7 @@ public class BaseController {
 				return null;
 			}
 		} else {
-			// Predicate<BaseService> ps = s -> s.canService(request);
+			Predicate<BaseService> ps = s -> s != null;
 			Set<Callable<BaseService>> ss = Arrays.stream(services).map(s -> new Callable<BaseService>() {
 				@Override
 				public BaseService call() throws Exception {
@@ -88,7 +88,7 @@ public class BaseController {
 					return null;
 				}
 			}).collect(Collectors.toSet());
-			return Thread4ViableResult.execute(ss, Math.min(DEFAULT_EXECUTE_POOL_SIZE, services.length), null);
+			return Thread4ViableResult.execute(ss, Math.min(DEFAULT_EXECUTE_POOL_SIZE, services.length), ps);
 		}
 	}
 
