@@ -39,7 +39,7 @@ public class BaseController {
 	@RequestMapping(value = "/{page}", method = { RequestMethod.GET })
 	public String page(@PathVariable String page, HttpServletRequest request, HttpServletResponse response) {
 		log.info("go to page .....{}", page);
-		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/";
+		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
 		request.setAttribute("basePath", basePath);
 		return page;
 	}

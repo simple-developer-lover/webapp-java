@@ -1,5 +1,7 @@
 package indi.monkey.webapp.commons.pub.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
@@ -92,34 +94,54 @@ public class Thread4ViableResult {
 						e.printStackTrace();
 					}
 				}
-				System.out.println(".................................................");
 				Runnable r = QUEUE.poll();
 				if (r != null) {
 					r.run();
-					log.info(">>>>>>>>>>> id:{} ... run,QUEUE size:{}", id, QUEUE.size());
 				}
 			}
 		}
 
 	}
 
-	public static void main(String[] args) throws InterruptedException {
-		log.info("start ...");
-		long startTime = System.currentTimeMillis();
-		for (int i = 0; i < 5; i++) {
-			addTask(new Thread(() -> System.out.println(">>>>>>>>> execute ......111111")));
+	public static void test() {
+		int i = 0;
+		System.err.println(">>>>>>>>>>>>>>>>>>> start");
+		List<Thread> ts = new ArrayList<>(10);
+		while (i < 10) {
+			Thread t = new Thread(() -> {
+				for (int a = 0; a < 100; a++) {
+					try {
+						Thread.sleep(100);
+						System.err.println("sleep ...");
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					addTask(new Thread(() -> {
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						System.out.println(">>>>>>>>> execute ......111111");
+					}));
+				}
+			});
+			t.start();
+			ts.add(t);
+			i++;
 		}
-		Thread.sleep(4000);
-		log.info("main thread has wait for {}ms ,start add the secend tasks...",(System.currentTimeMillis() - startTime));
-		for (int i = 0; i < 10; i++) {
-			addTask(new Thread(() -> System.out.println(">>>>>>>>> execute ......22222")));
+		for (Thread t : ts) {
+			try {
+				t.join(0);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-		Thread.sleep(5000);
-		log.info("main thread has wait for {}ms ,start add the secend tasks...",(System.currentTimeMillis() - startTime));
-		for (int i = 0; i < 10; i++) {
-			addTask(new Thread(() -> System.out.println(">>>>>>>>> execute ......3333")));
-		}
+		System.err.println(">>>>>>>>>>>>>>>>>>> end");
+	}
 
+	public static void main(String[] args) throws InterruptedException {
+		test();
 	}
 
 }

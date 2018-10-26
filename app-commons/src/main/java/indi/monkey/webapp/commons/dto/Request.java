@@ -43,7 +43,7 @@ public class Request implements Serializable {
 			Entry<String, String[]> e = it.next();
 			String[] value = e.getValue();
 			if (value != null && value.length > 0) {
-				if (SESSION_ID_KEY.equals(e.getKey())) {
+				if (SESSION_ID_KEY.equalsIgnoreCase(e.getKey())) {
 					sessionId = e.getValue()[0];
 				} else {
 					if (value.length > 1) {
