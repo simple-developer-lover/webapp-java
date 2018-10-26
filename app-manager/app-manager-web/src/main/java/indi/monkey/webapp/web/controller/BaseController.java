@@ -1,5 +1,11 @@
 package indi.monkey.webapp.web.controller;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,6 +22,7 @@ import com.alibaba.fastjson.JSON;
 import indi.monkey.webapp.commons.annotation.ExecuteService;
 import indi.monkey.webapp.commons.dto.Request;
 import indi.monkey.webapp.commons.dto.Response;
+import indi.monkey.webapp.commons.pub.util.Thread4ViableResult;
 import indi.monkey.webapp.service.BaseService;
 import indi.monkey.webapp.service.impl.BaseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +42,7 @@ import org.springframework.stereotype.Controller;
 public class BaseController {
 
 	BaseService[] services;
+	private static final int DEFAULT_EXECUTE_POOL_SIZE = 4;
 
 	@RequestMapping(value = "/{page}", method = { RequestMethod.GET })
 	public String page(@PathVariable String page, HttpServletRequest request, HttpServletResponse response) {
@@ -55,6 +63,30 @@ public class BaseController {
 	public Response<?> execute(HttpServletRequest request) {
 		return service(Request.of("default", request));
 	}
+	
+	/**
+	 * 这里的概念是一样的，都是判断是否canService，然后再处理service逻辑
+	 * @param request
+	 * @return
+	 */
+	protected BaseService buildService(Request request) {
+		if (services.length == 1) {
+			if (services[0].canService(request)) {
+				return services[0];
+			} else {
+				return null;
+			}
+		} else {
+			Predicate<BaseService> ps = s -> s.canService(request);
+			Set<Callable<BaseService>> ss = Arrays.stream(services).map(s -> new Callable<BaseService>() {
+				@Override
+				public BaseService call() throws Exception {
+					return s;
+				}
+			}).collect(Collectors.toSet());
+			return Thread4ViableResult.execute(ss, Math.min(DEFAULT_EXECUTE_POOL_SIZE, services.length), ps);
+		}
+	}
 
 	protected Response<?> service(Request request) {
 		String requestData = JSON.toJSONString(request);
@@ -64,24 +96,17 @@ public class BaseController {
 			log.info("no service in the controller:{}", this.getClass().getName());
 			throw new RuntimeException("no service error!!!");
 		}
-		for (BaseService service : services) {
-			if (service.canService(request)) {
-				try {
-					Response<?> resp = service.service(request);
-					resp.setTime(System.currentTimeMillis() - startTime);
-					String respStr = JSON.toJSONString(resp);
-					log.info("service execute success, response data:{} ...",
-							respStr.substring(0, Math.min(100, respStr.length())));
-					return resp;
-				} catch (Exception e) {
-					log.error("service execute error...", e);
-					throw new RuntimeException(
-							"service execute error, cause exception is :" + JSON.toJSONString(e.getMessage()));
-				}
-			}
+		BaseService service = buildService(request);
+		if (service != null) {
+			Response<?> resp = service.service(request);
+			String respStr = JSON.toJSONString(resp);
+			log.info("service execute success, response data:{} ...cast {}ms",
+					respStr.substring(0, Math.min(100, respStr.length())), (System.currentTimeMillis() - startTime));
+			return resp;
+		} else {
+			log.info("can't execute, cause request is : " + requestData);
+			throw new RuntimeException("can't execute, cause request is : " + requestData);
 		}
-		log.info("can't execute, cause request is : " + requestData);
-		throw new RuntimeException("can't execute, cause request is : " + requestData);
 	}
 
 	/**
