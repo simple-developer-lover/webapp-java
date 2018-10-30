@@ -70,7 +70,12 @@ public class BaseController {
 	 * @param request
 	 * @return
 	 */
+
 	protected BaseService buildService(Request request) {
+		if (services == null || services.length == 0) {
+			log.info("no service in the controller:{}", this.getClass().getName());
+			throw new RuntimeException("no service error!!!");
+		}
 		if (services.length == 1) {
 			if (services[0].canService(request)) {
 				return services[0];
@@ -96,16 +101,17 @@ public class BaseController {
 		String requestData = JSON.toJSONString(request);
 		long startTime = System.currentTimeMillis();
 		log.info("request:{}", requestData);
-		if (services == null || services.length == 0) {
-			log.info("no service in the controller:{}", this.getClass().getName());
-			throw new RuntimeException("no service error!!!");
-		}
 		BaseService service = buildService(request);
 		if (service != null) {
 			Response<?> resp = service.service(request);
-			String respStr = JSON.toJSONString(resp);
-			log.info("service execute success, response data:{} ...cast {}ms",
-					respStr.substring(0, Math.min(100, respStr.length())), (System.currentTimeMillis() - startTime));
+			if (resp.getException() != null) {
+				log.error("execute error...for \n", resp.getException());
+			} else {
+				String respStr = JSON.toJSONString(resp);
+				log.info("service execute success, response data:{} ...cast {}ms",
+						respStr.substring(0, Math.min(100, respStr.length())),
+						(System.currentTimeMillis() - startTime));
+			}
 			return resp;
 		} else {
 			log.info("can't execute, cause request is : " + requestData);
