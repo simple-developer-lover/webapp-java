@@ -105,23 +105,10 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 		return Response.of(resultMap);
 	}
 
-	private String[] processCup(String data) {
-		Pattern p = Pattern.compile("/\\d{2}[A|B|C|D|E|F|G]");
-		String[] result = new String[2];
-		Matcher matcher = p.matcher(data);
-		if (matcher.matches()) {
-			Matcher m = Pattern.compile("\\d{2}").matcher(data);
-			result[1] = String.valueOf(data.charAt(data.length() - 1));
-			if (m.find()) {
-				result[0] = m.group();
-			}
-			return result;
-		}
-		return null;
-	}
-
 	static class CupSizeFilter {
 		private static final Map<String, String> size_Map = new HashMap<>(6);
+		static Pattern p1 = Pattern.compile("/\\d{2}[A|B|C|D|E|F|G]");
+		static Pattern p2 = Pattern.compile("\\d{2}");
 		static {
 			size_Map.put("32", "70");
 			size_Map.put("34", "75");
@@ -129,6 +116,20 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 			size_Map.put("38", "85");
 			size_Map.put("40", "90");
 			size_Map.put("42", "95");
+		}
+
+		private static String[] processCup(String data) {
+			String[] result = new String[2];
+			Matcher matcher = p1.matcher(data);
+			if (matcher.matches()) {
+				Matcher m = p2.matcher(data);
+				result[1] = String.valueOf(data.charAt(data.length() - 1));
+				if (m.find()) {
+					result[0] = m.group();
+				}
+				return result;
+			}
+			return null;
 		}
 
 		private static String processSize(String size) {
@@ -212,7 +213,7 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 			return bras;
 		}
 		return bras.stream().map(s -> {
-			String[] processCup = processCup(s.getCup());
+			String[] processCup = CupSizeFilter.processCup(s.getCup());
 			if (processCup != null) {
 				s.setCup(processCup[1]);
 				s.setSize(CupSizeFilter.processSize(processCup[0]));
