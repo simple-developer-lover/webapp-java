@@ -25,6 +25,8 @@
 		<poi.excel.version>3.14</poi.excel.version>
 		<echarts.version>3.0.0.5</echarts.version>
 		<lombok.version>1.18.2</lombok.version>
+		<reflectasm.version>1.11.7</reflectasm.version>
+		<spring-boot.version>2.0.5.RELEASE</spring-boot.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -40,7 +42,7 @@
 			<dependency>
 				<groupId>com.esotericsoftware</groupId>
 				<artifactId>reflectasm</artifactId>
-				<version>1.11.7</version>
+				<version>${reflectasm.version}</version>
 			</dependency>
 			<!-- https://mvnrepository.com/artifact/cglib/cglib -->
 			<dependency>
@@ -53,6 +55,7 @@
 			<dependency>
 				<groupId>com.google.code.gson</groupId>
 				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
 			</dependency>
 
 			<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
@@ -71,19 +74,23 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-mail</artifactId>
+				<version>${spring-boot.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-test</artifactId>
+				<version>${spring-boot.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${spring-boot.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter</artifactId>
+				<version>${spring-boot.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.mybatis.spring.boot</groupId>
@@ -93,6 +100,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-websocket</artifactId>
+				<version>${spring-boot.version}</version>
 			</dependency>
 
 			<dependency>
@@ -104,6 +112,7 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.alibaba</groupId>
