@@ -2,38 +2,33 @@ package indi.monkey.webapp.dao.config;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 
-import com.alibaba.fastjson.JSON;
 import com.zaxxer.hikari.util.DriverDataSource;
 
 import indi.monkey.webapp.commons.pub.util.APPUtil;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
+@Slf4j
 public class DataSourceConfig {
-
-	private static final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
 
 	private static Properties properties = new Properties();
 
 	@PostConstruct
 	void init() {
 		String propertyFile = APPUtil.getProjectPath(DataSourceConfig.class) + APPUtil.defaultConfigName;
-		logger.info("start create dataSource ...... for property file :\"{}\"", propertyFile);
+		log.info("start create dataSource ...... for property file :\"{}\"", propertyFile);
 		try {
 			properties.load(new FileInputStream(new File(propertyFile)));
 		} catch (IOException e) {
-			logger.error("properties load fail ....for file path:{}", propertyFile);
+			log.error("properties load fail ....for file path:{}", propertyFile);
 			e.printStackTrace();
 		}
 	}
@@ -45,7 +40,7 @@ public class DataSourceConfig {
 		String driverClass = properties.getProperty("hibernate.driverClass", "com.mysql.jdbc.Driver");
 		String username = properties.getProperty("hibernate.username", "root");
 		String password = properties.getProperty("hibernate.password", "root");
-		logger.info("datasource jdbcUrl:{}", jdbcUrl);
+		log.info("datasource jdbcUrl:{}", jdbcUrl);
 		DriverDataSource dataSource = new DriverDataSource(jdbcUrl, driverClass, properties, username, password);
 		return dataSource;
 	}

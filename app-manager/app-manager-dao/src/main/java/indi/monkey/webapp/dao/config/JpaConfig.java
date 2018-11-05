@@ -1,9 +1,6 @@
 package indi.monkey.webapp.dao.config;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -12,8 +9,6 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -25,12 +20,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.google.common.collect.Maps;
 
 import indi.monkey.webapp.commons.pub.util.APPUtil;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableJpaRepositories(basePackages = { "indi.monkey.webapp.dao" })
 @EnableTransactionManagement
+@Slf4j
 public class JpaConfig {
-	private static final Logger logger = LoggerFactory.getLogger(JpaConfig.class);
 
 	@Resource(name = "hibernateDataSource")
 	private DataSource dataSource;
@@ -41,13 +37,13 @@ public class JpaConfig {
 
 	@PostConstruct
 	public void init() {
-		logger.info("start loader peroperties ..... filePath:\"{}\"", propertyFileName);
+		log.info("start loader peroperties ..... filePath:\"{}\"", propertyFileName);
 		try {
 			properties = PropertiesLoaderUtils.loadAllProperties(propertyFileName);
-			logger.info("load success...");
+			log.info("load success...");
 		} catch (IOException e) {
 			properties = new Properties();
-			logger.error("load error ...", e);
+			log.error("load error ...", e);
 		}
 	}
 
@@ -74,7 +70,7 @@ public class JpaConfig {
 		put("hibernate.hbm2ddl.auto", "update", jpaProperties);
 		put("hibernate.show_sql", "false", jpaProperties);
 		put("hibernate.format_sql", "true", jpaProperties);
-		logger.info("start init {} .... properties :{}... datasource:{}", this.getClass().getName(), jpaProperties,
+		log.info("start init {} .... properties :{}... datasource:{}", this.getClass().getName(), jpaProperties,
 				dataSource);
 		factory.setJpaPropertyMap(jpaProperties);
 		factory.afterPropertiesSet();

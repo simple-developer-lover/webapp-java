@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +16,12 @@ import com.google.common.collect.Sets;
 import indi.monkey.webapp.commons.annotation.AppService;
 import indi.monkey.webapp.commons.web.context.CommonsContext;
 import indi.monkey.webapp.service.FileService;
+import lombok.extern.slf4j.Slf4j;
 
 @Component(value = "fileServiceContext")
 @Order(50)
+@Slf4j
 public class FileServiceContext extends CommonsContext<FileService> {
-
-	private static final Logger logger = LoggerFactory.getLogger(FileServiceContext.class);
 
 	private Map<Long, FileService> idServices = Maps.newHashMap();
 
@@ -43,10 +41,10 @@ public class FileServiceContext extends CommonsContext<FileService> {
 				clazzServices.put(service.getClass(), service);
 				return true;
 			}
-			logger.info("service :{} enabled is false", service.getClass().getName());
+			log.info("service :{} enabled is false", service.getClass().getName());
 			return false;
 		}).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-		logger.info("fileServiceContext init end");
+		log.info("fileServiceContext init end");
 	}
 
 	public FileService getBean(Object beanType) {

@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -19,12 +17,12 @@ import com.google.common.collect.Sets;
 import indi.monkey.webapp.commons.annotation.AppService;
 import indi.monkey.webapp.commons.web.context.CommonsContext;
 import indi.monkey.webapp.service.BaseService;
+import lombok.extern.slf4j.Slf4j;
 
 @Component(value = "baseServiceContext")
 @Order(50)
+@Slf4j
 public class ServiceContext extends CommonsContext<BaseService> {
-
-	private static final Logger logger = LoggerFactory.getLogger(ServiceContext.class);
 
 	private Map<Long, BaseService> idServices = Maps.newHashMap();
 
@@ -44,10 +42,10 @@ public class ServiceContext extends CommonsContext<BaseService> {
 				clazzServices.put(service.getClass(), service);
 				return true;
 			}
-			logger.info("service :{} enabled is false", service.getClass().getName());
+			log.info("service :{} enabled is false", service.getClass().getName());
 			return false;
 		}).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-		logger.info("service init end");
+		log.info("service init end");
 	}
 
 	@SuppressWarnings("unchecked")

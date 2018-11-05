@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,8 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 public class Thread4ViableResult {
 
 	public static <T> T execute(Set<Callable<T>> calls, int serviceSize, Predicate<T> p) {
-		ExecutorService es = Executors.newFixedThreadPool(serviceSize);
-		final BlockingQueue<Future<T>> queue = new LinkedBlockingQueue<>();
+		ExecutorService es = Executors.newFixedThreadPool(serviceSize < 0 ? calls.size() : serviceSize);
+		final BlockingQueue<Future<T>> queue = new LinkedBlockingQueue<>(calls.size());
 		final CompletionService<T> service = new ExecutorCompletionService<>(es, queue);
 		T t = null;
 		calls.forEach(c -> {
@@ -31,18 +30,14 @@ public class Thread4ViableResult {
 			for (int i = 0; i < calls.size(); i++) {
 				t = service.take().get();
 				if (p != null) {
-					if (p.test(t)) {
+					if (p.test(t))
 						break;
-					}
 				} else {
-					if (t != null) {
+					if (t != null)
 						break;
-					}
 				}
 			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			es.shutdownNow();
