@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Implementation-Title: app-web
-Implementation-Version: 2.0.5.RELEASE
+Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: wb-tjf399322
-Implementation-Vendor-Id: org.springframework.boot
+Implementation-Vendor-Id: indi.monkey.webapp
 Build-Jdk: 1.8.0_172
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
- ot-starter-parent/app-web
+ ot-starter-parent/app-parent/app-web
 Created-By: Maven Integration for Eclipse
 

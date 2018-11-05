@@ -82,16 +82,17 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 			return Response.of(200);
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.error(">>>>", e);
 			return Response.builder().status(199).exception(e).build();
 		}
 	}
 
 	@HandlerMethod("getTaobaoData")
 	public Response<?> getData(Request req) {
-//		List<TaobaoShop> shops = taobaoShopDao.findAll();
+		// List<TaobaoShop> shops = taobaoShopDao.findAll();
 		Set<String> bra_types = Sets.newHashSet("A", "B", "C", "D", "E", "F", "G");
 		List<Map<String, Object>> lists = Lists.newArrayList();
-//		resultMap.put("shops", shops);
+		// resultMap.put("shops", shops);
 		for (String type : bra_types) {
 			Map<String, Object> resultMap = new HashMap<>(2);
 			resultMap.put("name", type);
@@ -119,18 +120,20 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 		return null;
 	}
 
-	private static final Map<String, String> size_Map = new HashMap<>(6);
-	static {
-		size_Map.put("32", "70");
-		size_Map.put("34", "75");
-		size_Map.put("36", "80");
-		size_Map.put("38", "85");
-		size_Map.put("40", "90");
-		size_Map.put("42", "95");
-	}
+	static class CupSizeFilter {
+		private static final Map<String, String> size_Map = new HashMap<>(6);
+		static {
+			size_Map.put("32", "70");
+			size_Map.put("34", "75");
+			size_Map.put("36", "80");
+			size_Map.put("38", "85");
+			size_Map.put("40", "90");
+			size_Map.put("42", "95");
+		}
 
-	private String processSize(String size) {
-		return size_Map.getOrDefault(size, size);
+		private static String processSize(String size) {
+			return size_Map.getOrDefault(size, size);
+		}
 	}
 
 	public static EchartsDto createBar(String title, String legend, List<Map<String, Object>> list) {
@@ -212,7 +215,7 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 			String[] processCup = processCup(s.getCup());
 			if (processCup != null) {
 				s.setCup(processCup[1]);
-				s.setSize(processSize(processCup[0]));
+				s.setSize(CupSizeFilter.processSize(processCup[0]));
 			}
 			return s;
 		}).collect(Collectors.toSet());

@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Implementation-Title: register
 Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: wb-tjf399322
-Implementation-Vendor-Id: com.cn.wenapp
+Implementation-Vendor-Id: indi.monkey.webapp
 Build-Jdk: 1.8.0_172
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
- ot-starter-parent/app-regist-center
+ ot-starter-parent/app-parent/app-regist-center
 Created-By: Maven Integration for Eclipse
 
