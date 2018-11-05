@@ -2,8 +2,6 @@ package indi.monkey.webapp.service.impl;
 
 import javax.annotation.Resource;
 
-import com.alibaba.fastjson.JSON;
-
 import indi.monkey.webapp.commons.annotation.AppService;
 import indi.monkey.webapp.commons.annotation.HandlerMethod;
 import indi.monkey.webapp.commons.dto.Request;
@@ -45,7 +43,6 @@ public class BaseServiceImpl implements BaseService {
 	@Override
 	public Response<?> service(Request request) {
 		String actionType = request.getActionName();
-		log.info("{} execute method:{} for args:{}", this.getClass().getName(), actionType, JSON.toJSONString(request));
 		try {
 			return loader.invoke(actionType, Response.class, request);
 		} catch (Exception e) {

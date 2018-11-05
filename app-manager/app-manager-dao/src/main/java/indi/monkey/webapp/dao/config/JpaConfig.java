@@ -33,7 +33,7 @@ public class JpaConfig {
 
 	private static final String propertyFileName = APPUtil.getProjectPath(DataBaseConfigListener.class)
 			+ APPUtil.defaultConfigName;
-	private static Properties properties;
+	private Properties properties;
 
 	@PostConstruct
 	public void init() {
@@ -64,6 +64,9 @@ public class JpaConfig {
 		factory.setPackagesToScan("indi.monkey.webapp.pojo");
 		factory.setDataSource(dataSource);
 		Map<String, Object> jpaProperties = Maps.newHashMap();
+		if (properties == null) {
+			this.init();
+		}
 		put("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy", jpaProperties);
 		put("hibernate.dialect", "indi.monkey.webapp.dao.config.JpaDialectConfig", jpaProperties);
 		put("hibernate.jdbc.batch_size", "50", jpaProperties);

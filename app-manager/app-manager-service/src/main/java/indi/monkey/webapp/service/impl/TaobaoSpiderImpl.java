@@ -146,7 +146,6 @@ public class TaobaoSpiderImpl extends BaseServiceImpl {
 		Integer[] yAxis = new Integer[list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			xAxis[i] = list.get(i).get("name").toString();
-
 			yAxis[i] = Integer.valueOf(list.get(i).get("value").toString());
 		}
 		dto.setXAxis(xAxis);
