@@ -3,7 +3,6 @@ package indi.monkey.webapp.pojo.hibernate.taobao;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

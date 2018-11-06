@@ -7,5 +7,5 @@ public interface BaseService {
 	boolean canService(Request request);
 
 	Response<?> service(Request request);
-	
+
 }
