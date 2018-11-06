@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DataSourceConfig {
 
-	private static Properties properties = new Properties();
+	private Properties properties = new Properties();
 
 	@PostConstruct
 	void init() {
@@ -39,7 +39,7 @@ public class DataSourceConfig {
 				"jdbc:mysql://30.1.46.138:3306/webapp_spider?useUnicode=true&characterEncoding=&useSSL=false");
 		String driverClass = properties.getProperty("hibernate.driverClass", "com.mysql.jdbc.Driver");
 		String username = properties.getProperty("hibernate.username", "root");
-		String password = properties.getProperty("hibernate.password", "rootroot");
+		String password = properties.getProperty("hibernate.password", "root");
 		log.info("datasource jdbcUrl:{}", jdbcUrl);
 		DriverDataSource dataSource = new DriverDataSource(jdbcUrl, driverClass, properties, username, password);
 		return dataSource;
