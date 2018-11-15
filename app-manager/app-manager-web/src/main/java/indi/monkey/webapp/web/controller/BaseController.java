@@ -109,7 +109,7 @@ public class BaseController {
 			} else {
 				String respStr = JSON.toJSONString(resp);
 				log.info("service execute success, response data:{} ...cast {}ms",
-						respStr.substring(0, Math.min(100, respStr.length())),
+						respStr.substring(0, Math.min(100, respStr.length() - 1)),
 						(System.currentTimeMillis() - startTime));
 			}
 			return resp;

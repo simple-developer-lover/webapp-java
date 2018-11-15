@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
-Built-By: tangjf
-Build-Jdk: 10.0.2
 Implementation-Title: app-manager-proxy
 Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: wb-tjf399322
 Implementation-Vendor-Id: indi.monkey.webapp
+Build-Jdk: 1.8.0_172
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/app-parent/app-manager/app-manager-proxy
 Created-By: Maven Integration for Eclipse

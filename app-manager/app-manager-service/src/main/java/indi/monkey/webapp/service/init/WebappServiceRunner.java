@@ -40,7 +40,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 			log.debug(JSON.toJSONString(args));
 		}
 		initBaseService();
-//		initFileService();
+		// initFileService();
 	}
 
 	protected void initBaseService() throws Exception {
@@ -52,7 +52,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 			if (!resolveProxy(service)) {
 				log.warn("service proxy init warn,this is no proxy in service:{}", service.getClass().getName());
 			}
-			assignMethods(service);
+			// assignMethods(service);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 	protected void initFileService() throws Exception {
 		Collection<FileService> beans = fileServiceContext.getBeans(null);
 		for (FileService service : beans) {
-			assignMethods(service);
+			// assignMethods(service);
 		}
 	}
 
@@ -86,8 +86,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 						f.setAccessible(true);
 						f.set(service, loader);
 						f.setAccessible(false);
-						log.info("MethodAccessLoader loader init success.....service:{}",
-								service.getClass().getName());
+						log.info("MethodAccessLoader loader init success.....service:{}", service.getClass().getName());
 						break;
 					} catch (Exception e) {
 						log.error("MethodAccessLoader loader init error", e);

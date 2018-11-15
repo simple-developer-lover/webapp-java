@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DataSourceConfig {
 
-	private Properties properties = new Properties();
+	private static final Properties properties = new Properties();
 
 	@PostConstruct
 	void init() {
@@ -44,20 +44,4 @@ public class DataSourceConfig {
 		DriverDataSource dataSource = new DriverDataSource(jdbcUrl, driverClass, properties, username, password);
 		return dataSource;
 	}
-
-	/*
-	 * @Bean(name = "mybatisDataSource") public DriverDataSource mybatisDataSource()
-	 * throws IOException { String propertyFile =
-	 * APPUtil.getProjectPath(DataSourceConfig.class) + APPUtil.defaultConfigName;
-	 * Properties properties =
-	 * PropertiesLoaderUtils.loadAllProperties(propertyFile); String jdbcUrl =
-	 * properties.getProperty("mybatis.jdbcUrl",
-	 * "jdbc:mysql://localhost:3306/webapp_spider"); String driverClass =
-	 * properties.getProperty("mybatis.driverClass", "com.mysql.jdbc.Driver");
-	 * String username = properties.getProperty("mybatis.username", "root"); String
-	 * password = properties.getProperty("mybatis.password", "root");
-	 * DriverDataSource dataSource = new DriverDataSource(jdbcUrl, driverClass,
-	 * properties, username, password); return dataSource; }
-	 */
-
 }

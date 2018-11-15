@@ -1,6 +1,7 @@
 package indi.monkey.webapp;
 
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +17,7 @@ public class WebappStarter {
 	protected static final String BASE_PACKAGES = "indi.monkey.webapp";
 
 	public static void main(String[] args) {
+		
 		SpringApplication.run(WebappStarter.class, args);
 	}
 }

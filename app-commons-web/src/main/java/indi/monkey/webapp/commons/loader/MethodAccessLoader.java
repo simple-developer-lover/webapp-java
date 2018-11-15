@@ -1,7 +1,6 @@
 package indi.monkey.webapp.commons.loader;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,7 +14,7 @@ public class MethodAccessLoader {
 
 	private Map<String, Integer> methods_index;
 	private MethodAccess access;
-	private Object obj;
+	private final Object obj;
 	transient private static final String BREAK_POINT = "-";
 
 	/**
@@ -29,7 +28,7 @@ public class MethodAccessLoader {
 
 	private void init() {
 		Class<?> type = obj.getClass();
-		HandlerMethod handlerMethod = obj.getClass().getAnnotation(HandlerMethod.class);
+		HandlerMethod handlerMethod = type.getAnnotation(HandlerMethod.class);
 		final String suffix = handlerMethod == null ? "" : handlerMethod.value();
 		Set<Method> methods = Sets.newHashSet(type.getDeclaredMethods());
 		access = MethodAccess.get(type);
@@ -38,7 +37,7 @@ public class MethodAccessLoader {
 			methods.addAll(Sets.newHashSet(type.getDeclaredMethods()));
 		}
 		methods_index = methods.stream().filter(m -> {
-			return !Modifier.isPrivate(m.getModifiers()) && m.getAnnotation(HandlerMethod.class) != null;
+			return m.getAnnotation(HandlerMethod.class) != null;
 		}).collect(Collectors.toMap(
 				m -> ("".equals(suffix) ? "" : suffix + BREAK_POINT) + m.getAnnotation(HandlerMethod.class).value(),
 				m -> access.getIndex(m.getName())));

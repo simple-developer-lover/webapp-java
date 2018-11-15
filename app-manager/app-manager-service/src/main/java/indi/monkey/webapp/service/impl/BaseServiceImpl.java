@@ -20,6 +20,23 @@ public class BaseServiceImpl implements BaseService {
 	@Resource
 	ServiceJumper jumper;
 
+	public BaseServiceImpl() {
+		if (loader == null) {
+			log.error(">>>>>> class:{} method loader initialize error .... please check it...",
+					this.getClass().getName());
+			synchronized (loader) {
+				if (loader == null) {
+					try {
+						log.info("try to initialize method loader");
+						loader = new MethodAccessLoader(this);
+					} catch (Exception e) {
+						log.error(">>>>> class:{} method loader initialize error....", e);
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * 示例
 	 * 
@@ -33,11 +50,7 @@ public class BaseServiceImpl implements BaseService {
 
 	@Override
 	public boolean canService(Request request) {
-		if (loader == null) {
-			log.error("class:{} method loader init error .... please check it...", this.getClass().getName());
-			return false;
-		}
-		return loader.contains(request.getActionName());
+		return loader != null && loader.contains(request.getActionName());
 	}
 
 	@Override
