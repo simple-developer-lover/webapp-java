@@ -31,7 +31,7 @@ public class JpaConfig {
 	@Resource(name = "hibernateDataSource")
 	private DataSource dataSource;
 
-	private static final String propertyFileName = APPUtil.getProjectPath(DataBaseConfigListener.class)
+	private static final String propertyFileName = APPUtil.getProjectPath(JpaConfig.class)
 			+ APPUtil.defaultConfigName;
 	private Properties properties;
 

@@ -15,16 +15,21 @@ public class APPUtil {
 		String path = clazz.getResource("").getPath();
 		String name = clazz.getName();
 		String simpleName = clazz.getSimpleName();
-		name = name.replaceAll("\\.", "/").replace("/" + simpleName, "");
+		name = name.replaceAll("\\.", "/").replace("\\/" + simpleName, "");
 		return path.replace(name, "");
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T >Class<T> getGenericType(Class<?> targetClass) {
+	public static <T> Class<T> getGenericType(Class<?> targetClass) {
 		Type[] types = ((ParameterizedType) targetClass.getGenericSuperclass()).getActualTypeArguments();
 		if (types.length == 1) {
 			return (Class<T>) types[0];
 		}
 		throw new RuntimeException("genericType error!!!");
+	}
+
+	public static void main(String[] args) {
+		String projectPath = getProjectPath(APPUtil.class);
+		System.out.println(projectPath);
 	}
 }

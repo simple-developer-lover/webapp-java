@@ -27,6 +27,7 @@ import indi.monkey.webapp.service.BaseService;
 import indi.monkey.webapp.service.impl.BaseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 
@@ -43,6 +44,9 @@ public class BaseController {
 
 	BaseService[] services;
 	private static final int DEFAULT_EXECUTE_POOL_SIZE = 4;
+	
+	@Value("${username}")
+	private String s;
 
 	@RequestMapping(value = "/{page}", method = { RequestMethod.GET })
 	public String page(@PathVariable String page, HttpServletRequest request, HttpServletResponse response) {

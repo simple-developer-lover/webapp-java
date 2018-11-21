@@ -52,7 +52,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 			if (!resolveProxy(service)) {
 				log.warn("service proxy init warn,this is no proxy in service:{}", service.getClass().getName());
 			}
-			// assignMethods(service);
+			assignMethods(service);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 	protected void initFileService() throws Exception {
 		Collection<FileService> beans = fileServiceContext.getBeans(null);
 		for (FileService service : beans) {
-			// assignMethods(service);
+			assignMethods(service);
 		}
 	}
 
@@ -77,20 +77,34 @@ public class WebappServiceRunner implements ApplicationRunner {
 		if (clazz.isInterface()) {
 			return;
 		}
-		MethodAccessLoader loader = new MethodAccessLoader(service);
-
+		MethodAccessLoader loader = null;
+		try {
+			log.info("try to initialize method loader");
+			loader = new MethodAccessLoader(service);
+		} catch (Exception e) {
+			log.error(">>>>> class:{} method loader initialize error....", e);
+		}
+		if (loader == null) {
+			return;
+		}
 		while (!clazz.isInterface() && clazz != Object.class) {
 			for (Field f : clazz.getDeclaredFields()) {
-				if (f.getType().isAssignableFrom(MethodAccessLoader.class)) {
-					try {
-						f.setAccessible(true);
-						f.set(service, loader);
-						f.setAccessible(false);
-						log.info("MethodAccessLoader loader init success.....service:{}", service.getClass().getName());
-						break;
-					} catch (Exception e) {
-						log.error("MethodAccessLoader loader init error", e);
-						throw e;
+				synchronized (f) {
+					if (f.getType().isAssignableFrom(MethodAccessLoader.class)) {
+						try {
+							Object object = f.get(service);
+							if (object == null) {
+								f.setAccessible(true);
+								f.set(service, loader);
+								f.setAccessible(false);
+							}
+							log.info("MethodAccessLoader loader init success.....service:{}",
+									service.getClass().getName());
+							break;
+						} catch (Exception e) {
+							log.error("MethodAccessLoader loader init error", e);
+							throw e;
+						}
 					}
 				}
 			}

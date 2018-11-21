@@ -11,7 +11,7 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class PropertiesListenerConfig {
 	public static Map<String, String> propertiesMap = new HashMap<>();
-	
+
 	private static void processProperties(Properties props) throws BeansException {
 		propertiesMap = new HashMap<String, String>();
 		for (Object key : props.keySet()) {
