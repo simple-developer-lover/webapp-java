@@ -2,7 +2,6 @@ package indi.monkey.webapp.commons.web.context;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,11 +20,23 @@ import com.google.common.collect.Sets;
 import indi.monkey.webapp.commons.pub.util.APPUtil;
 
 @ComponentScans(value = {})
+@ComponentScan
 public class CommonsContext<T> implements ApplicationContextAware {
 
 	protected ApplicationContext applicationContext;
 
 	protected Map<String, T> beanMap = Maps.newHashMap();
+
+	private boolean allow(Set<String> allowPackages, Entry<String, T> e) {
+		for (String pack : allowPackages) {
+			if (e.getValue() != null && e.getValue().getClass().getName().indexOf(pack) > -1) {
+				return true;
+			} else {
+				continue;
+			}
+		}
+		return false;
+	}
 
 	public void init() {
 		Class<T> type = APPUtil.getGenericType(this.getClass());
@@ -47,14 +58,7 @@ public class CommonsContext<T> implements ApplicationContextAware {
 				return;
 			}
 			beanMap = beanMap.entrySet().stream().filter(e -> {
-				for (String pack : allowPackages) {
-					if (e.getValue() != null && e.getValue().getClass().getName().indexOf(pack) > -1) {
-						return true;
-					} else {
-						continue;
-					}
-				}
-				return false;
+				return allow(allowPackages, e);
 			}).collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 		}
 

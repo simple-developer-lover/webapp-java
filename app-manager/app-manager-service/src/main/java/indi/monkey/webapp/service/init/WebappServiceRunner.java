@@ -79,7 +79,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 		}
 		MethodAccessLoader loader = null;
 		try {
-			log.info("try to initialize method loader");
+			log.info("try to initialize method loader for service:{}", service.getClass().getName());
 			loader = new MethodAccessLoader(service);
 		} catch (Exception e) {
 			log.error(">>>>> class:{} method loader initialize error....", e);
