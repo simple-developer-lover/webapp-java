@@ -57,7 +57,7 @@ public class FileServiceImpl implements FileService {
 				ImageIO.write(bi, "png", outputStream);
 			}
 		} catch (IOException e) {
-			log.info("file read error:{}", JSON.toJSONString(e));
+			log.error(">>>>> file read error...", e);
 		}
 	}
 }

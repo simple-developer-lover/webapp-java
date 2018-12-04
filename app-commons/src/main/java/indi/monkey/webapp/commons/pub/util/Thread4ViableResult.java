@@ -1,6 +1,7 @@
 package indi.monkey.webapp.commons.pub.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -18,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Thread4ViableResult {
 
-	public static <T> T execute(Set<Callable<T>> calls, int serviceSize, Predicate<T> p) {
+	public static <T> T execute(Collection<Callable<T>> calls, int serviceSize, Predicate<T> p) {
 		ExecutorService es = Executors.newFixedThreadPool(serviceSize < 0 ? calls.size() : serviceSize);
 		final BlockingQueue<Future<T>> queue = new LinkedBlockingQueue<>(calls.size());
 		final CompletionService<T> service = new ExecutorCompletionService<>(es, queue);

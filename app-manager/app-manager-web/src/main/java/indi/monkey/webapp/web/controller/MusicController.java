@@ -17,7 +17,7 @@ public class MusicController extends BaseController {
 
 	@RequestMapping(value = "/video_url_to_musicData", method = RequestMethod.GET)
 	public Response<?> video_url_to_musicData(String actionType, HttpServletRequest request) {
-		Request req = Request.of(actionType, request);
+		Request req = Request.of(request,actionType);
 		return service(req);
 	}
 }

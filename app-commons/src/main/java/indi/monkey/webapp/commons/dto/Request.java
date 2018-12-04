@@ -1,6 +1,7 @@
 package indi.monkey.webapp.commons.dto;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,7 +27,7 @@ public class Request implements Serializable {
 	/**
 	 * 
 	 */
-	transient private static Gson GSON = new Gson();
+//	transient private static Gson GSON = new Gson();
 	transient private static final String SESSION_ID_KEY = "sessionId";
 	private static final long serialVersionUID = 5960932972846007724L;
 	private int requestId;
@@ -35,7 +36,7 @@ public class Request implements Serializable {
 	private String actionName;
 	private Map<String, String> context;
 
-	public static final Request of(String actionName, HttpServletRequest request) {
+	public static final Request of(HttpServletRequest request, String... args) {
 		Map<String, String[]> map = request.getParameterMap();
 		Map<String, String> data = Maps.newHashMap();
 		String sessionId = null;
@@ -47,7 +48,7 @@ public class Request implements Serializable {
 					sessionId = e.getValue()[0];
 				} else {
 					if (value.length > 1) {
-						data.put(e.getKey(), GSON.toJson(value));
+						data.put(e.getKey(), Arrays.toString(value));
 					} else {
 						data.put(e.getKey(), value[0]);
 					}
@@ -56,12 +57,10 @@ public class Request implements Serializable {
 		}
 		if (StringUtils.isEmpty(sessionId)) {
 			Object obj = request.getSession().getAttribute(SESSION_ID_KEY);
-			if (obj != null) {
-				sessionId = obj.toString();
-			}
+			sessionId = String.valueOf(obj);
 		}
 		return Request.builder().requestId(request.hashCode()).uuid(UUIDUtil.getUUID32()).context(data)
-				.sessionId(sessionId).actionName(actionName).build();
+				.sessionId(sessionId).actionName(args[0]).build();
 	}
 
 	public String putParam(String key, String value) {

@@ -23,7 +23,7 @@ public class SpiderController extends BaseController {
 	@RequestMapping(value = "/{serviceName}", method = { RequestMethod.POST })
 	@ResponseBody
 	public Response<?> spider(@PathVariable String serviceName, HttpServletRequest request) {
-		Request req = Request.of(serviceName, request);
+		Request req = Request.of(request,serviceName);
 		return service(req);
 	}
 
