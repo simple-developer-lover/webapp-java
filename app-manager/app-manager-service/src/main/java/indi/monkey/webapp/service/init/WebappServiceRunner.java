@@ -50,7 +50,7 @@ public class WebappServiceRunner implements ApplicationRunner {
 		}
 		for (BaseService service : beans) {
 			if (!resolveProxy(service)) {
-				log.warn("service proxy init warn,this is no proxy in service:{}", service.getClass().getName());
+				log.warn(">>>>> service proxy init warning,there is no proxy in service:{}", service.getClass().getName());
 			}
 			assignMethods(service);
 		}

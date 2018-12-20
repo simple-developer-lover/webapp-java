@@ -85,7 +85,7 @@ public class ServiceContext extends CommonsContext<BaseService> {
 				services.add(getBean(beanType));
 			}
 		}
-		return services;
+		return services.stream().filter(s -> s != null).collect(Collectors.toSet());
 	}
 
 }

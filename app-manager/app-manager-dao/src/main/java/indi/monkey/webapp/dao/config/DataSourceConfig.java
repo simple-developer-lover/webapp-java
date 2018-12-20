@@ -23,7 +23,7 @@ public class DataSourceConfig {
 
 	@PostConstruct
 	void init() {
-		String propertyFile = APPUtil.getProjectPath(DataSourceConfig.class) + APPUtil.defaultConfigName;
+		String propertyFile = APPUtil.getProjectPath(this.getClass()) + APPUtil.defaultConfigName;
 		log.info("start create dataSource ...... for property file :\"{}\"", propertyFile);
 		try {
 			properties.load(new FileInputStream(new File(propertyFile)));

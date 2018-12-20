@@ -12,7 +12,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
+import java.util.concurrent.ThreadPoolExecutor.DiscardPolicy;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,11 +60,11 @@ public class Thread4ViableResult {
 	public static void addTask(Runnable runnable) {
 		if (runnable != null && QUEUE.size() < 1000) {
 			try {
-				QUEUE.put(runnable);
 				synchronized (LOCK) {
+					QUEUE.put(runnable);
 					LOCK.notifyAll();
 				}
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -85,61 +88,41 @@ public class Thread4ViableResult {
 
 		@Override
 		public void run() {
-			while (true) {
-				if (QUEUE.isEmpty()) {
-					try {
-						synchronized (LOCK) {
-							LOCK.wait();
-						}
-						log.info(">>>>> lock  id:{}", id);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				Runnable r = QUEUE.poll();
-				if (r != null) {
-					r.run();
-				}
-			}
-		}
-
-	}
-
-	public static void test() {
-		int i = 0;
-		System.err.println(">>>>>>>>>>>>>>>>>>> start");
-		List<Thread> ts = new ArrayList<>(10);
-		while (i < 10) {
-			Thread t = new Thread(() -> {
-				for (int a = 0; a < 100; a++) {
-					try {
-						Thread.sleep(100);
-						System.err.println("sleep ...");
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					addTask(new Thread(() -> {
-						try {
-							Thread.sleep(10);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						System.out.println(">>>>>>>>> execute ......111111");
-					}));
-				}
-			});
-			t.start();
-			ts.add(t);
-			i++;
-		}
-		for (Thread t : ts) {
 			try {
-				t.join(0);
+				Thread.sleep(3);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				count++;
 			}
+			// System.out.println(String.format(">>>>>>>> id:%s thread in running", id));
 		}
-		System.err.println(">>>>>>>>>>>>>>>>>>> end");
+	}
+
+	static final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2, 2, 0L, TimeUnit.SECONDS, QUEUE,
+			new DiscardPolicy());
+
+	private volatile static int count = 0;
+
+	public static void test() {
+		for (int i = 0; i < 1000; i++) {
+			// long start = System.currentTimeMillis();
+			threadPoolExecutor.submit(new WorkThread(i));
+			// System.out.println(String.format(">>>>>>>> add task cost:%s ms",
+			// (System.currentTimeMillis() - start)));
+		}
+		System.err.println(">>>> sleep for 3000 ms ...");
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		for (int i = 0; i < 1000; i++) {
+			threadPoolExecutor.submit(new WorkThread(i));
+		}
+		while (QUEUE.size() > 0) {
+			System.out.println(String.format(">>>>> task queue size:%s", QUEUE.size()));
+		}
+		System.out.println(String.format("execute for %s times", count));
 	}
 
 	public static void main(String[] args) throws InterruptedException {

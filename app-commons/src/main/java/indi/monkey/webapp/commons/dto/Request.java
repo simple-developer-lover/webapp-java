@@ -27,7 +27,7 @@ public class Request implements Serializable {
 	/**
 	 * 
 	 */
-//	transient private static Gson GSON = new Gson();
+	// transient private static Gson GSON = new Gson();
 	transient private static final String SESSION_ID_KEY = "sessionId";
 	private static final long serialVersionUID = 5960932972846007724L;
 	private int requestId;
@@ -60,7 +60,7 @@ public class Request implements Serializable {
 			sessionId = String.valueOf(obj);
 		}
 		return Request.builder().requestId(request.hashCode()).uuid(UUIDUtil.getUUID32()).context(data)
-				.sessionId(sessionId).actionName(args[0]).build();
+				.sessionId(sessionId).actionName(args.length > 0 ? args[0] : "default").build();
 	}
 
 	public String putParam(String key, String value) {
