@@ -36,5 +36,4 @@ public class SpiderServiveImpl extends BaseServiceImpl {
 			return Response.builder().status(199).exception(e).build();
 		}
 	}
-
 }

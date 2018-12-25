@@ -9,8 +9,10 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
+import indi.monkey.webapp.commons.dto.request.Action;
+import indi.monkey.webapp.commons.dto.request.Domain;
 import indi.monkey.webapp.commons.pub.util.StringUtils;
 import indi.monkey.webapp.commons.pub.util.UUIDUtil;
 import lombok.AllArgsConstructor;
@@ -33,7 +35,8 @@ public class Request implements Serializable {
 	private int requestId;
 	private String sessionId;
 	private String uuid;
-	private String actionName;
+	private Domain domain;
+	private Action action;
 	private Map<String, String> context;
 
 	public static final Request of(HttpServletRequest request, String... args) {
@@ -55,12 +58,28 @@ public class Request implements Serializable {
 				}
 			}
 		}
+		long domainId = 0l;
+		String domainName = request.getParameter("domainName");
+		String actionName = null;
+		try {
+			domainId = Long.valueOf(request.getParameter("domainId"));
+		} catch (Exception e) {
+		}
+		try {
+			actionName = request.getParameter("actionName");
+			if (actionName == null) {
+				actionName = args[0];
+			}
+		} catch (Exception e) {
+		}
+		Domain domain = Domain.builder().domainId(domainId).domainName(domainName).build();
+		Action action = Action.builder().actioName(actionName).build();
 		if (StringUtils.isEmpty(sessionId)) {
 			Object obj = request.getSession().getAttribute(SESSION_ID_KEY);
 			sessionId = String.valueOf(obj);
 		}
 		return Request.builder().requestId(request.hashCode()).uuid(UUIDUtil.getUUID32()).context(data)
-				.sessionId(sessionId).actionName(args.length > 0 ? args[0] : "default").build();
+				.sessionId(sessionId).domain(domain).action(action).build();
 	}
 
 	public String putParam(String key, String value) {

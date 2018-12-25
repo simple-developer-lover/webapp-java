@@ -19,8 +19,6 @@ import com.google.common.collect.Sets;
 
 import indi.monkey.webapp.commons.pub.util.APPUtil;
 
-@ComponentScans(value = {})
-@ComponentScan
 public class CommonsContext<T> implements ApplicationContextAware {
 
 	protected ApplicationContext applicationContext;

@@ -35,7 +35,6 @@ public class SpiderProxyImpl implements SpiderProxy {
 		Map<String, String> context = request.getContext();
 		if (context.size() != 0) {
 			SocketClient client = new SocketClient(IP, PORT);
-			context.put(ACTION_TYPE, request.getActionName());
 			String data = JSON.toJSONString(context);
 			logger.info("start request data:{}", data);
 			try {

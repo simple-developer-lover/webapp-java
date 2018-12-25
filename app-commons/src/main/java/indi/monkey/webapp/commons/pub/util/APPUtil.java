@@ -2,6 +2,9 @@ package indi.monkey.webapp.commons.pub.util;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class APPUtil {
 
@@ -29,7 +32,12 @@ public class APPUtil {
 	}
 
 	public static void main(String[] args) {
-		String projectPath = getProjectPath(APPUtil.class);
-		System.out.println(projectPath);
+		List<String> list1 = new ArrayList<String>();
+		List<String> lists = list1.stream().collect(Collectors.toList());
+		lists.add("1");
+		System.out.println(list1);
+		// AI 精度
+		// 算法 --> 企业 -->
+		// 数据量大 --> 用户
 	}
 }
